@@ -35,14 +35,16 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.map.setOnClickListener{
-            val intent = Intent(requireContext(), MapsActivity::class.java)
+        binding.mapRadioButton
+            .setOnClickListener{
+            val intent = Intent(requireContext(), MapssActivity::class.java)
             startActivityForResult(intent, 1)
         }
-//        binding.arabic.setOnClickListener {
-//         setLocale("ar")
-//        }
-//        binding.english.setOnClickListener { setLocale("en") }
+        binding.arabicRadioButton.setOnClickListener {
+         setLocale("ar")
+        }
+        binding.englishRadioButton
+            .setOnClickListener { setLocale("en") }
     }
 
     override fun onCreateView(
