@@ -59,11 +59,13 @@ class SettingFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 1 && resultCode == 1) {
-            val latitude = data?.getDoubleExtra("latitude", 0.0)
-            val longitude = data?.getDoubleExtra("longitude", 0.0)
-            // Use latitude and longitude here
-        }
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val latitude = data?.getDoubleExtra("latitude", 0.0) ?: 0.0
+            val longitude = data?.getDoubleExtra("longitude", 0.0) ?: 0.0
+println("long $longitude")
+            println("loc $latitude")
+      }
     }
     private fun setLocale(lang: String) {
         val locale = Locale(lang)
