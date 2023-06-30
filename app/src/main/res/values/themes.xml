@@ -17,6 +17,10 @@
         <item name="cardCornerRadius">8dp</item>
         <item name="cardElevation">4dp</item>
     </style>
+    <style name="MyTheme" parent="Theme.MaterialComponents.DayNight">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/background_color_dark</item>
+    </style>
     <style name="ModernRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="android:buttonTint">@null</item>
         <item name="android:background">@drawable/radiobutton</item>

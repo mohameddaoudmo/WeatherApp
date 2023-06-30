@@ -1,7 +1,9 @@
 package com.example.designpattern.model
 
+import android.content.Context
 import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.network.RemoteSource
+import com.example.weatherforecastapp.ui.home.model.Forecast
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -13,7 +15,7 @@ class Repostiory(
 ) : RepositioryInterface {
 
 
-    override suspend fun getFromNetwork():  Flow<Response<com.example.designpattern.model.Response>>{
+    override suspend fun getFromNetwork():  Flow<Response<Forecast>>{
         return remoteSource.getProductsFromNetwork()
     }
 
@@ -32,6 +34,16 @@ class Repostiory(
 
     override suspend fun removeFromFavorites(product: Product) {
 //        concreteLocalSource.delete(product)
+    }
+
+    override fun getCurrentWeather(
+        
+        lat: Double,
+        lon: Double,
+        lang: String,
+        unit: String,
+    ) {
+        remoteSource.sendCurrentWeather(lat,lon,lang,unit)
     }
 
 

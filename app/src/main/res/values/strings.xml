@@ -18,4 +18,6 @@
     <string name="map">Map</string>
     <string name="titleactivityaps">MapsActivity</string>
     <string name="title_activity_mapss">MapssActivity</string>
+    <string name="wind">Wind</string>
+    <string name="humdity">Humdity</string>
 </resources>

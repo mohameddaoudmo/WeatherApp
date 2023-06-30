@@ -35,7 +35,6 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.test.text =latitude.toString()
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
 
