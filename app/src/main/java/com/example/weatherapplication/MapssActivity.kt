@@ -10,8 +10,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.example.weatherapplication.databinding.ActivityMapssBinding
+
 
 class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
@@ -21,7 +20,7 @@ class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCl
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mapss)
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 

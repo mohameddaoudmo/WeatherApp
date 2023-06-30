@@ -19,10 +19,27 @@
         android:id="@+id/homeFragment2"
         android:name="com.example.weatherapplication.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <argument
+            android:name="long"
+            app:argType="float" />
+        <argument
+            android:name="lat"
+            app:argType="float" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.example.weatherapplication.SettingFragment"
         android:label="fragment_setting"
-        tools:layout="@layout/fragment_setting" />
+        tools:layout="@layout/fragment_setting" >
+        <argument
+            android:name="Longitude"
+            app:argType="float" />
+        <argument
+            android:name="Latitude"
+            app:argType="float" />
+        <action
+            android:id="@+id/action_settingFragment_to_homeFragment2"
+            app:destination="@id/homeFragment2" />
+    </fragment>
 </navigation>
