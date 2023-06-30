@@ -29,6 +29,7 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
             }.collect {
 
                 if (it.isSuccessful) {
+
                     _productsMutableStateFlow.value = NetworkState.Success(it.body()!!)
                 } else {
                     val errorBody = it.errorBody()?.string()
@@ -40,6 +41,7 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
     }
     fun senddata( lat:Double, lon:Double, lang:String, unit:String) {
         repoInterface.getCurrentWeather(lat,lon,lang,unit)
+
     }
 
     fun addToFavorites(product: Product){

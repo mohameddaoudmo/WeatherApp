@@ -13,20 +13,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 const val BASE_URL = "https://api.openweathermap.org/"
 
 object ApiClient : RemoteSource {
-    var lat :Double =0.0
-    var lon :Double =0.0
+    var latitude :Double ?=null
+    var longitude :Double ?= null
     var language :String =""
     var unit :String =""
-
-
-    override suspend fun getProductsFromNetwork(): Flow<Response<Forecast>> {
-    val x = Api.apiService.getCurrentWeatherByLatAndLon(lat, lon)
-     return flowOf(x)
-
-
-    }
-
-    override fun sendCurrentWeather(
+    override  fun sendCurrentWeather(
         lat: Double,
         lon: Double,
         lang: String,
@@ -34,10 +25,24 @@ object ApiClient : RemoteSource {
     ) {
         this.language = lang
         this.unit = unit
-        this.lat = lat
-        this.lon = lon
+        latitude = lat
+        longitude = lon
+        println("in remote source $latitude $longitude")
+    }
+
+
+    override suspend fun getProductsFromNetwork(): Flow<Response<Forecast>> {
+
+            val x = Api.apiService.getCurrentWeatherByLatAndLon(latitude ?: 0.0 , longitude ?: 0.0)
+            return flowOf(x)
+        println("$latitude  $longitude mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+
+
+
 
     }
+
+
 }
 
 object RetrofitHelper {

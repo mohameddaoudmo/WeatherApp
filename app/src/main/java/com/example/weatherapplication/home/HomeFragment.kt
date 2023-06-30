@@ -21,6 +21,9 @@ import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -31,7 +34,6 @@ class HomeFragment : Fragment(){
     lateinit var viewModel : SharedViewModel
     lateinit var geocoder: Geocoder
     lateinit var binding : FragmentHomeBinding
-    private val weatherViewModel: ForcastViewModel by viewModels()
     lateinit var forcastViewModel: ForcastViewModel
     lateinit var forcastViewModelFactory: AllproductviewFactory
 
@@ -54,6 +56,7 @@ class HomeFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+
         geocoder = Geocoder(requireContext())
 
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
@@ -76,38 +79,68 @@ class HomeFragment : Fragment(){
             this,
             forcastViewModelFactory
         ).get(ForcastViewModel::class.java)
-        forcastViewModel.senddata(latitude,longitude,"en","")
         val animationDrawable :AnimationDrawable = binding.mainliner.background as AnimationDrawable
     animationDrawable.setEnterFadeDuration(2500)
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
 
+
         viewModel.longitude.observe(viewLifecycleOwner){longitude ->
             this.longitude = longitude
+
         }
         viewModel.latitude.observe(viewLifecycleOwner){latitude ->
             this.latitude = latitude
-            val x = geocoder.getFromLocation(latitude ,this.longitude, 5)
+            forcastViewModel.senddata(latitude,longitude,"en","")
 
-            if (x != null&&x.size>0) {
-                binding.country.text =x[0].countryName
-                binding.place.text = x[0].adminArea
-                println("heyyyyyyyy"+this.latitude)
-                println("heyyyyyyyy"+this.longitude)
-                println(x.size)
 
-            }
+            try{
+                val x = geocoder.getFromLocation(latitude ,this.longitude, 5)
+
+                if (x != null&&x.size>0) {
+                    binding.country.text =x[0].countryName
+                    binding.place.text = x[0].adminArea
+
+                    println(x.size) }}
+            catch (e :Exception ){}
+
+
+
+
 
 
 
         }
+
+
         lifecycleScope.launch {
+
             forcastViewModel.productsStateFlow.collectLatest{result->
                 when(result){
                     is NetworkState.Loading -> {
                     }
                     is NetworkState.Success -> {
-                        binding.testtxt.text =result.myResponse.current.toString()
+                        println(result.myResponse.current.weather[0].icon +"ssssssssssssssss")
+                        println("${result.myResponse.timezone} ssssssssssssssssaasa" )
+
+
+
+
+                        when (result.myResponse.current.weather[0].icon) {
+                            "01d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
+                            "02d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)
+                            "03d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_cloudy_weather)
+                            "09d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
+                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
+                            "11d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_storm_weather)
+                            "13d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_snow_weather)
+                            "01n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
+                            "03n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
+                            "04d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
+
+                            "09n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
+
+                        }
 
                     }
                     else ->{
@@ -118,6 +151,8 @@ class HomeFragment : Fragment(){
 
             }
         }
+
+
 
 
 

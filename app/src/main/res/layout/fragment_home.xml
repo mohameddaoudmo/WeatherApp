@@ -31,7 +31,7 @@
             <LinearLayout
                 android:layout_width="377dp"
                 android:layout_height="121dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:orientation="horizontal">
@@ -39,7 +39,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="99dp"
+                    android:layout_height="109dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -62,7 +62,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    tools:src="@tools:sample/avatars" />
+                    tools:src="@drawable/ic_clear_day" />
 
             </LinearLayout>
 
@@ -126,7 +126,6 @@
         android:layout_height="148dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        app:cardBackgroundColor="#E7EBED"
         app:cardCornerRadius="25dp"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -134,7 +133,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="150dp"
+            android:background="@drawable/background2">
 
             <TextView
                 android:id="@+id/tv_humidity_temp"

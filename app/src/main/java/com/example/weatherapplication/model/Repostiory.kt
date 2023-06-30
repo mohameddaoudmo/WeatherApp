@@ -13,6 +13,10 @@ class Repostiory(
     private val remoteSource: RemoteSource,
     private val concreteLocalSource: ConLocalSource
 ) : RepositioryInterface {
+    var latitude :Double = 0.0
+    var longitude :Double = 0.0
+    var language :String =""
+    var unit :String =""
 
 
     override suspend fun getFromNetwork():  Flow<Response<Forecast>>{
@@ -44,6 +48,7 @@ class Repostiory(
         unit: String,
     ) {
         remoteSource.sendCurrentWeather(lat,lon,lang,unit)
+
     }
 
 

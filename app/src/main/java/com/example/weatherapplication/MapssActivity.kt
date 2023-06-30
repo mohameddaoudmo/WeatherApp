@@ -16,11 +16,12 @@ class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCl
 
     private lateinit var mMap: GoogleMap
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mapss)
 
-        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        val mapFragment = supportFragmentManager.findFragmentById(R.id.map_fragments) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
