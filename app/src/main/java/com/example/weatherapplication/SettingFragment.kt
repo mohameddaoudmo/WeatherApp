@@ -18,6 +18,8 @@ import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
 import com.example.weatherapplication.databinding.FragmentSettingBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import java.util.*
 
 
@@ -90,8 +92,7 @@ class SettingFragment : Fragment() {
             println("loc $latitude")
             viewModel.longitude.value = longitude
             viewModel.latitude.value = latitude
-            forcastViewModel.senddata(latitude,longitude,"en","")
-
+            forcastViewModel.getAllProducts(latitude,longitude,"en","")
 
 
 

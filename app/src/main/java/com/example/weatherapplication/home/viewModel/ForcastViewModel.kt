@@ -18,13 +18,16 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
     val productsStateFlow: StateFlow<NetworkState>
         get() = _productsMutableStateFlow
     init {
-        getAllProducts()
     }
 
 
-    private fun getAllProducts() {
+     fun getAllProducts(  lat: Double,
+                                 lon: Double,
+                                 lang: String,
+                                 unit: String,) {
+        println("$lat in view model")
         viewModelScope.launch {
-            repoInterface.getFromNetwork().catch {
+            repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
                 NetworkState.Failure(it.message!!)
             }.collect {
 

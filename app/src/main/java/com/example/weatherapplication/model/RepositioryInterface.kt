@@ -6,7 +6,10 @@ import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface RepositioryInterface  {
-    suspend fun getFromNetwork() : Flow<Response<Forecast>>
+    suspend fun getFromNetwork(  lat: Double,
+                                 lon: Double,
+                                 lang: String,
+                                 unit: String,) : Flow<Response<Forecast>>
 
     suspend fun getFromDatabase() : Flow<List<Product>>
     suspend fun saveProducts(products : List<Product>)

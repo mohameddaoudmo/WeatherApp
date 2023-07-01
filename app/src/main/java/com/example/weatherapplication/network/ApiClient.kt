@@ -33,9 +33,12 @@ object ApiClient : RemoteSource {
     }
 
 
-    override suspend fun getProductsFromNetwork(): Flow<Response<Forecast>> {
+    override suspend fun getProductsFromNetwork(  lat: Double,
+                                                  lon: Double,
+                                                  lang: String,
+                                                  unit: String,): Flow<Response<Forecast>> {
 
-            val x = Api.apiService.getCurrentWeatherByLatAndLon(latitude ?: 0.0 , longitude ?: 0.0)
+            val x = Api.apiService.getCurrentWeatherByLatAndLon(lat,lon)
             return flowOf(x)
         println("$latitude  $longitude mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 

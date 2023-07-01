@@ -19,8 +19,11 @@ class Repostiory(
     var unit :String =""
 
 
-    override suspend fun getFromNetwork():  Flow<Response<Forecast>>{
-        return remoteSource.getProductsFromNetwork()
+    override suspend fun getFromNetwork(  lat: Double,
+                                          lon: Double,
+                                          lang: String,
+                                          unit: String,):  Flow<Response<Forecast>>{
+        return remoteSource.getProductsFromNetwork(lat,lon ,lang,unit)
     }
 
     override suspend fun getFromDatabase(): Flow<List<Product>> {

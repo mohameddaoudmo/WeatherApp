@@ -89,6 +89,7 @@ class HomeFragment : Fragment(){
             forcastViewModel.productsStateFlow.collectLatest{result->
                 when(result){
                     is NetworkState.Loading -> {
+                        println("isloading")
                     }
                     is NetworkState.Success -> {
                         println(result.myResponse.current.weather[0].icon +"ssssssssssssssss")
@@ -130,7 +131,7 @@ class HomeFragment : Fragment(){
         }
         viewModel.latitude.observe(viewLifecycleOwner){latitude ->
             this.latitude = latitude
-//            forcastViewModel.senddata(latitude,longitude,"en","")
+            forcastViewModel.getAllProducts(latitude,longitude,"en","")
 
 
             try{

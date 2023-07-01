@@ -12,7 +12,10 @@ interface RemoteSource {
         lang: String,
         unit: String,
     )
-    suspend fun getProductsFromNetwork(): Flow<Response<Forecast>>
+    suspend fun getProductsFromNetwork(  lat: Double,
+                                         lon: Double,
+                                         lang: String,
+                                         unit: String,): Flow<Response<Forecast>>
 
 
 
