@@ -26,6 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeFragment : Fragment(){
     private var longitude: Double = 0.0
@@ -73,6 +75,13 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val sdf = SimpleDateFormat("HH:mm")
+        val currentTime = sdf.format(calendar.time)
+        binding.timetxtview.text =currentTime
         forcastViewModelFactory =
             AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
         forcastViewModel = ViewModelProvider(
@@ -94,6 +103,10 @@ class HomeFragment : Fragment(){
                     is NetworkState.Success -> {
                         println(result.myResponse.current.weather[0].icon +"ssssssssssssssss")
                         println("${result.myResponse.timezone} ssssssssssssssssaasa" )
+                        binding.tvHumidityTemp.text =result.myResponse.current.humidity.toString()
+                        binding.tvWindSpeedUnit.text = result.myResponse.current.wind_speed.toString()
+                        binding.temparaturetxtview.text =result.myResponse.current.temp.toString()
+                        binding.statustxview.text = result.myResponse.current.weather[0].description
 
 
 
