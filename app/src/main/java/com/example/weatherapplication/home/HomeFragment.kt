@@ -84,35 +84,6 @@ class HomeFragment : Fragment(){
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
 
-
-        viewModel.longitude.observe(viewLifecycleOwner){longitude ->
-            this.longitude = longitude
-
-        }
-        viewModel.latitude.observe(viewLifecycleOwner){latitude ->
-            this.latitude = latitude
-            forcastViewModel.senddata(latitude,longitude,"en","")
-
-
-            try{
-                val x = geocoder.getFromLocation(latitude ,this.longitude, 5)
-
-                if (x != null&&x.size>0) {
-                    binding.country.text =x[0].countryName
-                    binding.place.text = x[0].adminArea
-
-                    println(x.size) }}
-            catch (e :Exception ){}
-
-
-
-
-
-
-
-        }
-
-
         lifecycleScope.launch {
 
             forcastViewModel.productsStateFlow.collectLatest{result->
@@ -151,6 +122,35 @@ class HomeFragment : Fragment(){
 
             }
         }
+
+
+        viewModel.longitude.observe(viewLifecycleOwner){longitude ->
+            this.longitude = longitude
+
+        }
+        viewModel.latitude.observe(viewLifecycleOwner){latitude ->
+            this.latitude = latitude
+//            forcastViewModel.senddata(latitude,longitude,"en","")
+
+
+            try{
+                val x = geocoder.getFromLocation(latitude ,this.longitude, 5)
+
+                if (x != null&&x.size>0) {
+                    binding.country.text =x[0].countryName
+                    binding.place.text = x[0].adminArea
+
+                    println(x.size) }}
+            catch (e :Exception ){}
+
+
+
+
+
+
+
+        }
+
 
 
 

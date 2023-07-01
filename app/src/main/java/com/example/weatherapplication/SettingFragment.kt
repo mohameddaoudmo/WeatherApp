@@ -12,6 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
+import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
+import com.example.designpattern.allproduct.viewModel.ForcastViewModel
+import com.example.designpattern.db.ConLocalSource
+import com.example.designpattern.model.Repostiory
+import com.example.designpattern.network.ApiClient
 import com.example.weatherapplication.databinding.FragmentSettingBinding
 import java.util.*
 
@@ -20,6 +25,8 @@ class SettingFragment : Fragment() {
     var longitude: Double? = 1.0
     var latitude : Double? =1.0
     lateinit var viewModel :SharedViewModel
+    lateinit var forcastViewModel: ForcastViewModel
+    lateinit var forcastViewModelFactory: AllproductviewFactory
 
     lateinit var binding :FragmentSettingBinding
     companion object {
@@ -35,6 +42,12 @@ class SettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        forcastViewModelFactory =
+            AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
+        forcastViewModel = ViewModelProvider(
+            this,
+            forcastViewModelFactory
+        ).get(ForcastViewModel::class.java)
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
 
@@ -44,6 +57,7 @@ class SettingFragment : Fragment() {
             .setOnClickListener{
             val intent = Intent(requireContext(), MapssActivity::class.java)
             startActivityForResult(intent, 1)
+
         }
         binding.arabicRadioButton.setOnClickListener {
          setLocale("ar")
@@ -76,12 +90,14 @@ class SettingFragment : Fragment() {
             println("loc $latitude")
             viewModel.longitude.value = longitude
             viewModel.latitude.value = latitude
+            forcastViewModel.senddata(latitude,longitude,"en","")
 
 
 
 
 
-      }
+
+        }
     }
     private fun setLocale(lang: String) {
         val locale = Locale(lang)

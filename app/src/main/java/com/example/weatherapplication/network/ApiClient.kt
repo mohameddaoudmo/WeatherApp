@@ -1,6 +1,7 @@
 package com.example.designpattern.network
 
 import android.content.Context
+import com.example.weatherapplication.SharedViewModel
 import com.example.weatherforecastapp.ui.home.model.Forecast
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -13,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 const val BASE_URL = "https://api.openweathermap.org/"
 
 object ApiClient : RemoteSource {
+
     var latitude :Double ?=null
     var longitude :Double ?= null
     var language :String =""
