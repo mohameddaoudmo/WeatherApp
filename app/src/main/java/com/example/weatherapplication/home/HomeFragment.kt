@@ -25,26 +25,26 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment() {
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
-    lateinit var  timeZone: TimeZone
-    var timeZoneS : String ?=""
+    lateinit var timeZone: TimeZone
+    var timeZoneS: String? = ""
+    var language: String = ""
+    var unit: String = ""
 
-    lateinit var viewModel : SharedViewModel
+
+    lateinit var viewModel: SharedViewModel
     lateinit var geocoder: Geocoder
-    lateinit var binding : FragmentHomeBinding
+    lateinit var binding: FragmentHomeBinding
     lateinit var forcastViewModel: ForcastViewModel
     lateinit var forcastViewModelFactory: AllproductviewFactory
-
 
 
     override fun onResume() {
         super.onResume()
 
     }
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +64,8 @@ class HomeFragment : Fragment(){
 
 
 
-        binding= FragmentHomeBinding.inflate(inflater,container,false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Inflate the layout for this fragment
         return binding.root
 
     }
@@ -83,20 +82,20 @@ class HomeFragment : Fragment(){
             this,
             forcastViewModelFactory
         ).get(ForcastViewModel::class.java)
-        val animationDrawable :AnimationDrawable = binding.mainliner.background as AnimationDrawable
-    animationDrawable.setEnterFadeDuration(2500)
+        val animationDrawable: AnimationDrawable = binding.mainliner.background as AnimationDrawable
+        animationDrawable.setEnterFadeDuration(2500)
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
 
         lifecycleScope.launch {
 
-            forcastViewModel.productsStateFlow.collectLatest{result->
-                when(result){
+            forcastViewModel.productsStateFlow.collectLatest { result ->
+                when (result) {
                     is NetworkState.Loading -> {
                         println("isloading")
                     }
                     is NetworkState.Success -> {
-                        binding.timetv.visibility=View.VISIBLE
+                        binding.timetv.visibility = View.VISIBLE
 
                         timeZone = TimeZone.getTimeZone(result.myResponse.timezone)
 
@@ -111,19 +110,21 @@ class HomeFragment : Fragment(){
 
                         sdf.timeZone = timeZone
 
-
+println( result.myResponse.hourly)
                         val timeZoneTime = sdf.format(currentDate)
 
-                        binding.timetv.text =timeZoneTime
+                        binding.timetv.text = timeZoneTime
                         timeZoneS = result.myResponse.timezone
-                        println(result.myResponse.current.weather[0].icon +"ssssssssssssssss")
-                        println("${result.myResponse.timezone} ssssssssssssssssaasa" )
-                        binding.tvHumidityTemp.text =result.myResponse.current.humidity.toString()
-                        binding.tvWindSpeedUnit.text = result.myResponse.current.wind_speed.toString()
-                        binding.temparaturetxtview.text =result.myResponse.current.temp.toString()
+                        println(result.myResponse.current.weather[0].icon + "ssssssssssssssss")
+                        println("${result.myResponse.timezone} ssssssssssssssssaasa")
+                        binding.tvHumidityTemp.text = result.myResponse.current.humidity.toString()
+                        binding.tvWindSpeedUnit.text =
+                            result.myResponse.current.wind_speed.toString()
+                        binding.temparaturetxtview.text = result.myResponse.current.temp.toString()
                         binding.statustxview.text = result.myResponse.current.weather[0].description
-                        binding.tvCloudsUnit.text =result.myResponse.current.clouds.toString() +" %"
-                        binding.tvPressureUnit.text =result.myResponse.current.pressure.toString()
+                        binding.tvCloudsUnit.text =
+                            result.myResponse.current.clouds.toString() + " %"
+                        binding.tvPressureUnit.text = result.myResponse.current.pressure.toString()
 
 
 
@@ -145,62 +146,59 @@ class HomeFragment : Fragment(){
                         }
 
                     }
-                    else ->{
-                        Toast.makeText(requireContext(), "check your connection $result", Toast.LENGTH_SHORT).show()
+                    else -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "check your connection $result",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
                     }
                 }
 
             }
         }
-
-
-        viewModel.longitude.observe(viewLifecycleOwner){longitude ->
+        viewModel.language.observe(viewLifecycleOwner) {
+            language = it
+        }
+        viewModel.unitfortemp.observe(viewLifecycleOwner) {
+            unit = it
+        }
+        viewModel.longitude.observe(viewLifecycleOwner) { longitude ->
             this.longitude = longitude
 
         }
-        viewModel.latitude.observe(viewLifecycleOwner){latitude ->
+        viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
             this.latitude = latitude
-            forcastViewModel.getAllProducts(latitude,longitude,"en","")
+            forcastViewModel.getAllProducts(latitude, longitude, language, unit)
 
 
-            try{
-                val x = geocoder.getFromLocation(latitude ,this.longitude, 5)
+            try {
+                val x = geocoder.getFromLocation(latitude, this.longitude, 5)
 
-                if (x != null&&x.size>0) {
-                    binding.country.text =x[0].countryName
+                if (x != null && x.size > 0) {
+                    binding.country.text = x[0].countryName
                     binding.place.text = x[0].adminArea
 
-                    println(x.size) }}
-            catch (e :Exception ){}
-
-
-
-
-
+                    println(x.size)
+                }
+            } catch (e: Exception) {
+            }
 
 
         }
 
 
-
-
-
-
-
-
-
     }
+
     private val locationCallBack: LocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             val lastLocation = locationResult.lastLocation
 
 
-
         }
     }
-
 
 
 }

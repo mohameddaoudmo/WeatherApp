@@ -25,7 +25,7 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
                                  lon: Double,
                                  lang: String,
                                  unit: String,) {
-        println("$lat in view model")
+        println("$lat $lang in view model")
         viewModelScope.launch {
             repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
                 NetworkState.Failure(it.message!!)

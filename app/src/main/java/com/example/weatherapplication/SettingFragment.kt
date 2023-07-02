@@ -61,11 +61,16 @@ class SettingFragment : Fragment() {
             startActivityForResult(intent, 1)
 
         }
+        binding.celsuis.setOnClickListener { viewModel.unitfortemp.value ="metric" }
+        binding.fahrenheit.setOnClickListener { viewModel.unitfortemp.value ="imperial" }
+        binding.kelvin.setOnClickListener { viewModel.unitfortemp.value ="" }
         binding.arabicRadioButton.setOnClickListener {
          setLocale("ar")
+            viewModel.language.value ="ar"
         }
         binding.englishRadioButton
-            .setOnClickListener { setLocale("en") }
+            .setOnClickListener { setLocale("en")
+                viewModel.language.value ="ar"}
         binding.gpsRadioButton.setOnClickListener { }
     }
 
@@ -92,7 +97,7 @@ class SettingFragment : Fragment() {
             println("loc $latitude")
             viewModel.longitude.value = longitude
             viewModel.latitude.value = latitude
-            forcastViewModel.getAllProducts(latitude,longitude,"en","")
+//            forcastViewModel.getAllProducts(latitude,longitude,"en","")
 
 
 
