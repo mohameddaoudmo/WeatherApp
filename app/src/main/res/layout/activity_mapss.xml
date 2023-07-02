@@ -5,9 +5,9 @@
 
     <fragment
 
+        android:name="com.google.android.gms.maps.SupportMapFragment"
 
         android:id="@+id/map_fragments"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
 
 
         android:layout_height="match_parent"
