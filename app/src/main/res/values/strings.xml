@@ -20,4 +20,9 @@
     <string name="title_activity_mapss">MapssActivity</string>
     <string name="wind">Wind</string>
     <string name="humdity">Humdity</string>
+    <string name="perssure">Pressure</string>
+    <string name="cloud">Cloud</string>
+    <string name="unit">Unit</string>
+    <string name="unitforwind">Wind Unit</string>
+    <string name="unittemp"> Temp Unit </string>
 </resources>

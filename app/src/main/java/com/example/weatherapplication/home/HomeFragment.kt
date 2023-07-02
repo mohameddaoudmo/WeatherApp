@@ -3,12 +3,11 @@ package com.example.weatherapplication.home
 import android.graphics.drawable.AnimationDrawable
 import android.location.Geocoder
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
@@ -21,9 +20,6 @@ import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -32,6 +28,8 @@ import java.util.*
 class HomeFragment : Fragment(){
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
+    lateinit var  timeZone: TimeZone
+    var timeZoneS : String ?=""
 
     lateinit var viewModel : SharedViewModel
     lateinit var geocoder: Geocoder
@@ -75,13 +73,10 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
 
-        val sdf = SimpleDateFormat("HH:mm")
-        val currentTime = sdf.format(calendar.time)
-        binding.timetxtview.text =currentTime
+//        binding.timetv.visibility=View.INVISIBLE
+
+
         forcastViewModelFactory =
             AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
         forcastViewModel = ViewModelProvider(
@@ -101,12 +96,34 @@ class HomeFragment : Fragment(){
                         println("isloading")
                     }
                     is NetworkState.Success -> {
+                        binding.timetv.visibility=View.VISIBLE
+
+                        timeZone = TimeZone.getTimeZone(result.myResponse.timezone)
+
+                        val currentTimeMillis = System.currentTimeMillis()
+
+
+                        val currentDate = Date(currentTimeMillis)
+
+
+                        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+
+                        sdf.timeZone = timeZone
+
+
+                        val timeZoneTime = sdf.format(currentDate)
+
+                        binding.timetv.text =timeZoneTime
+                        timeZoneS = result.myResponse.timezone
                         println(result.myResponse.current.weather[0].icon +"ssssssssssssssss")
                         println("${result.myResponse.timezone} ssssssssssssssssaasa" )
                         binding.tvHumidityTemp.text =result.myResponse.current.humidity.toString()
                         binding.tvWindSpeedUnit.text = result.myResponse.current.wind_speed.toString()
                         binding.temparaturetxtview.text =result.myResponse.current.temp.toString()
                         binding.statustxview.text = result.myResponse.current.weather[0].description
+                        binding.tvCloudsUnit.text =result.myResponse.current.clouds.toString() +" %"
+                        binding.tvPressureUnit.text =result.myResponse.current.pressure.toString()
 
 
 
@@ -116,7 +133,7 @@ class HomeFragment : Fragment(){
                             "02d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)
                             "03d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_cloudy_weather)
                             "09d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
-                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
+                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rain_svgrepo_com)
                             "11d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_storm_weather)
                             "13d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_snow_weather)
                             "01n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)

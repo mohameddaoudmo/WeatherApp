@@ -41,19 +41,19 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                actionBar?.hide()
-                drawerLayout.closeDrawer(GravityCompat.START)
-            } else {
-                actionBar?.show()
-
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        if (item.itemId == android.R.id.home) {
+//            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+//                actionBar?.hide()
+//                drawerLayout.closeDrawer(GravityCompat.START)
+//            } else {
+//                actionBar?.show()
+//
+//                drawerLayout.openDrawer(GravityCompat.START)
+//            }
+//        }
+//        return super.onOptionsItemSelected(item)
+//    }
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
@@ -61,12 +61,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun hideSystemUI() {
-        // Enables regular immersive mode.
-        // For the content to be visible behind the status and navigation bar,
-        // your theme needs to be Theme.AppCompat.Light.NoActionBar.
+
         window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
-                // Set the content to appear under the system bars so that the
-                // content doesn't resize when the system bars hide and show.
+
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
