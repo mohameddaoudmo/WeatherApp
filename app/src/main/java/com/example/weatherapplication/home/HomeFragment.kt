@@ -19,6 +19,7 @@ import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
+import com.example.weatherforecastapp.ui.home.model.Daily
 import com.example.weatherforecastapp.ui.home.model.Hourly
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
@@ -35,10 +36,15 @@ class HomeFragment : Fragment() {
     var language: String = ""
     var unit: String = ""
     private lateinit var hours: List<Hourly>
+    private lateinit var day: List<Daily>
+
 
 
     private lateinit var recyclerAdapter:RecyclerAdapter
+    private lateinit var dayAdatper: DayAdatper
+
     private lateinit var myLayoutManager: LinearLayoutManager
+    private lateinit var dayLayoutManager: LinearLayoutManager
 
 
     lateinit var viewModel: SharedViewModel
@@ -79,12 +85,22 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dayLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
 
         myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.HORIZONTAL,false)
         recyclerAdapter =RecyclerAdapter(view.context)
+                dayAdatper = DayAdatper(view.context){
 
-        binding.rchour.apply { adapter= recyclerAdapter
+                }
+
+
+
+                binding.rchour.apply { adapter= recyclerAdapter
             layoutManager = myLayoutManager }
+        binding.rcday.apply { adapter= dayAdatper
+            layoutManager = dayLayoutManager
+
+        }
 
 
         forcastViewModelFactory =
@@ -107,6 +123,8 @@ class HomeFragment : Fragment() {
                     }
                     is NetworkState.Success -> {
                         hours = result.myResponse.hourly
+                        day = result.myResponse.daily
+                       dayAdatper.submitList(day)
                         recyclerAdapter.submitList(hours)
 
                         binding.timetv.visibility = View.VISIBLE

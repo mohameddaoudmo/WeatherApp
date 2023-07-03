@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:id="@+id/mainconstrintlayout"
     android:layout_height="match_parent"
-android:background="@drawable/cloudyback"
+    android:background="@drawable/cloudyback"
     tools:context=".home.HomeFragment" >
 
     <ScrollView
@@ -368,13 +368,25 @@ android:background="@drawable/cloudyback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/card_pressure"
+                tools:layoutManager="GridLayoutManager" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="150dp"
 
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/card_pressure"
+                app:layout_constraintTop_toBottomOf="@+id/rchour"
                 tools:layoutManager="GridLayoutManager" />
+
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
