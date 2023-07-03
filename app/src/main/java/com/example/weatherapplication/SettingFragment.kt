@@ -70,7 +70,7 @@ class SettingFragment : Fragment() {
         }
         binding.englishRadioButton
             .setOnClickListener { setLocale("en")
-                viewModel.language.value ="ar"}
+                viewModel.language.value ="en"}
         binding.gpsRadioButton.setOnClickListener { }
     }
 

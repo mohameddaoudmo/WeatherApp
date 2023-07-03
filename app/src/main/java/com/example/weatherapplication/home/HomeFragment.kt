@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
 import com.example.designpattern.allproduct.viewModel.ForcastViewModel
 import com.example.designpattern.db.ConLocalSource
@@ -18,6 +19,7 @@ import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
+import com.example.weatherforecastapp.ui.home.model.Hourly
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationResult
 import kotlinx.coroutines.flow.collectLatest
@@ -32,6 +34,11 @@ class HomeFragment : Fragment() {
     var timeZoneS: String? = ""
     var language: String = ""
     var unit: String = ""
+    private lateinit var hours: List<Hourly>
+
+
+    private lateinit var recyclerAdapter:RecyclerAdapter
+    private lateinit var myLayoutManager: LinearLayoutManager
 
 
     lateinit var viewModel: SharedViewModel
@@ -73,7 +80,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.timetv.visibility=View.INVISIBLE
+        myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.HORIZONTAL,false)
+        recyclerAdapter =RecyclerAdapter(view.context)
+
+        binding.rchour.apply { adapter= recyclerAdapter
+            layoutManager = myLayoutManager }
 
 
         forcastViewModelFactory =
@@ -95,6 +106,9 @@ class HomeFragment : Fragment() {
                         println("isloading")
                     }
                     is NetworkState.Success -> {
+                        hours = result.myResponse.hourly
+                        recyclerAdapter.submitList(hours)
+
                         binding.timetv.visibility = View.VISIBLE
 
                         timeZone = TimeZone.getTimeZone(result.myResponse.timezone)
@@ -110,13 +124,12 @@ class HomeFragment : Fragment() {
 
                         sdf.timeZone = timeZone
 
-println( result.myResponse.hourly)
+
                         val timeZoneTime = sdf.format(currentDate)
 
                         binding.timetv.text = timeZoneTime
                         timeZoneS = result.myResponse.timezone
-                        println(result.myResponse.current.weather[0].icon + "ssssssssssssssss")
-                        println("${result.myResponse.timezone} ssssssssssssssssaasa")
+
                         binding.tvHumidityTemp.text = result.myResponse.current.humidity.toString()
                         binding.tvWindSpeedUnit.text =
                             result.myResponse.current.wind_speed.toString()
@@ -160,6 +173,8 @@ println( result.myResponse.hourly)
         }
         viewModel.language.observe(viewLifecycleOwner) {
             language = it
+            forcastViewModel.getAllProducts(latitude, longitude, language, unit)
+
         }
         viewModel.unitfortemp.observe(viewLifecycleOwner) {
             unit = it
