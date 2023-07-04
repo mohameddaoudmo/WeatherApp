@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/laungue"
+        android:layout_width="190dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/bottombar"
+        android:fontFamily="@font/bevan"
+        android:padding="16dp"
+        android:text="@string/lanugaue"
+        android:textColor="#F5F9FB"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/language_radio_group"
+        android:layout_width="190dp"
+        android:layout_height="141dp"
+        android:layout_marginStart="2dp"
+        android:orientation="vertical"
+        android:weightSum="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/laungue">
+
+        <RadioButton
+            android:id="@+id/english_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/english"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/arabic_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/arabic"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/locationtxtview"
+        android:layout_width="190dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/bottombar"
+        android:fontFamily="@font/bevan"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/locationdefine"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/llocation_radio_group"
+        android:layout_width="190dp"
+        android:layout_height="141dp"
+        android:layout_marginEnd="2dp"
+
+        android:orientation="vertical"
+        android:weightSum="2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationtxtview">
+
+        <RadioButton
+            android:id="@+id/map_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/map"
+            android:textColor="#265B83"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="-3dp"
+            tools:layout_editor_absoluteY="460dp" />
+
+        <RadioButton
+            android:id="@+id/gps_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/gps"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/unit"
+        android:layout_width="190dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/bottombar"
+        android:fontFamily="@font/bevan"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/unittemp"
+        android:textColor="#F5F9FB"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/language_radio_group" />
+
+    <RadioGroup
+        android:id="@+id/unittemp"
+        android:layout_width="190dp"
+        android:layout_height="180dp"
+        android:layout_marginEnd="2dp"
+
+        android:orientation="vertical"
+        android:weightSum="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unit">
+
+        <RadioButton
+            android:id="@+id/kelvin"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/kelvin"
+            android:textColor="#265B83"
+            android:textSize="20sp"
+            tools:layout_editor_absoluteX="-3dp"
+            tools:layout_editor_absoluteY="460dp" />
+
+        <RadioButton
+            android:id="@+id/fahrenheit"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/Fahrenheit"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/celsuis"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/celsius"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+
+    </RadioGroup>
+
+
+    <TextView
+        android:id="@+id/unitwind"
+        android:layout_width="190dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="2dp"
+        android:background="@drawable/bottombar"
+        android:fontFamily="@font/bevan"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/unitforwind"
+        android:textColor="#F5F9FB"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llocation_radio_group" />
+    <RadioGroup
+        android:layout_width="190dp"
+        android:layout_height="141dp"
+        android:layout_marginStart="2dp"
+        android:orientation="vertical"
+        android:weightSum="2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unitwind">
+
+        <RadioButton
+            android:id="@+id/milesperhour"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/mileshour"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+        <RadioButton
+            android:id="@+id/meterpersc"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/aldrich"
+            android:text="@string/metersec"
+            android:textColor="#265B83"
+            android:textSize="20sp" />
+
+
+
+    </RadioGroup>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
