@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 class SharedViewModel : ViewModel() {
     var longitude:  MutableLiveData <Double> = MutableLiveData<Double>(0.0)
     var latitude:  MutableLiveData <Double> =MutableLiveData<Double>(0.0)
-    var gps : MutableLiveData <Boolean> = MutableLiveData<Boolean>()
+    var satusoflocation : MutableLiveData <String> = MutableLiveData<String>()
     var unitfortemp : MutableLiveData <String> = MutableLiveData<String>()
     var unitforwind : MutableLiveData <String> = MutableLiveData<String>()
     var language : MutableLiveData <String> = MutableLiveData<String>()
+
 
 
 

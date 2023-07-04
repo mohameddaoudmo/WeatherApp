@@ -17,6 +17,13 @@
         android:theme="@style/Theme.WeatherApplication"
         tools:targetApi="31">
         <activity
+            android:name=".dialog"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".FristScreen"
             android:exported="true">
             <intent-filter>
@@ -24,6 +31,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -50,8 +58,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="false">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

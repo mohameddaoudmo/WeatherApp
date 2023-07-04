@@ -1,31 +1,33 @@
 package com.example.weatherapplication
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import androidx.appcompat.app.AlertDialog
+import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.airbnb.lottie.LottieAnimationView
 
 class FristScreen : AppCompatActivity() {
+
+    lateinit var viewModel :SharedViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_frist_screen)
-        val splashThread: Thread = object : Thread() {
-            override fun run() {
-                try {
-                    sleep(3000) // Sleep for 3 seconds
-                } catch (e: InterruptedException) {
-                    e.printStackTrace()
-                } finally {
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
-                    startActivity(Intent(this@FristScreen, MainActivity::class.java))
-                    finish() // Finish SplashActivity
-                }
-            }
-        }
-        splashThread.start()
+        val lottieView = findViewById<LottieAnimationView>(R.id.lottie_view)
+        lottieView.setAnimation(R.raw.lottieweather)
+        lottieView.playAnimation()
 
+        val handler = Handler()
+        handler.postDelayed({
+            startActivity(Intent(this, dialog::class.java))
+            finish() // Finish SplashActivity
 
+        }, 3000) // Delay for 3 seconds
     }
+
+
 }

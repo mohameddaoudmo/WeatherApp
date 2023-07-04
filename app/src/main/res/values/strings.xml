@@ -25,4 +25,8 @@
     <string name="unit">Unit</string>
     <string name="unitforwind">Wind Unit</string>
     <string name="unittemp"> Temp Unit </string>
+    <string name="selectlocationway">Select Location way:</string>
+    <string name="setting">Setting</string>
+    <string name="location">Location</string>
+    <string name="ok">ok</string>
 </resources>

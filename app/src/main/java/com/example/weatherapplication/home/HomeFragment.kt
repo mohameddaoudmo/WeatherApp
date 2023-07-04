@@ -1,12 +1,24 @@
 package com.example.weatherapplication.home
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.AnimationDrawable
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,13 +29,13 @@ import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
+import com.example.weatherapplication.My_LOCATION_PERMISSION_ID
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.example.weatherforecastapp.ui.home.model.Daily
 import com.example.weatherforecastapp.ui.home.model.Hourly
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -36,6 +48,9 @@ class HomeFragment : Fragment() {
     var timeZoneS: String? = ""
     var language: String = ""
     var unit: String = ""
+    var gps:Boolean =false
+    lateinit var fusedClient: FusedLocationProviderClient
+
     private lateinit var hours: List<Hourly>
     private lateinit var day: List<Daily>
 
@@ -57,6 +72,11 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if(gps){
+        getLastLocation()
+
+        }
+
 
     }
 
@@ -87,6 +107,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dayLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
+        fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.HORIZONTAL,false)
         recyclerAdapter =RecyclerAdapter(view.context)
@@ -203,6 +224,13 @@ class HomeFragment : Fragment() {
             this.longitude = longitude
 
         }
+        viewModel.satusoflocation.observe(viewLifecycleOwner){
+println(it)
+            if (it=="gps"){
+                gps=true
+            }
+
+        }
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
             this.latitude = latitude
             forcastViewModel.getAllProducts(latitude, longitude, language, unit)
@@ -230,10 +258,113 @@ class HomeFragment : Fragment() {
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             val lastLocation = locationResult.lastLocation
+            println(lastLocation?.latitude)
+            println(lastLocation?.longitude)
+            if (gps){
+          longitude =lastLocation?.longitude ?:0.0
+            latitude = lastLocation?.latitude?:0.0}
+            forcastViewModel.getAllProducts(lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, language, unit)
+
+
+            try {
+                val x = geocoder.getFromLocation(locationResult.lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, 5)
+
+                if (x != null && x.size > 0) {
+                    binding.country.text = x[0].countryName
+                    binding.place.text = x[0].adminArea
+
+                    println(x.size)
+                }
+            } catch (e: Exception) {
+            }
+
 
 
         }
     }
+
+
+
+    private fun getLastLocation() {
+        if (checkPermission()) {
+            if (isLocationIsEnabled()) {
+                requestNewLocationData()
+            } else {
+                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                startActivity(intent)
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+
+    private fun checkPermission(): Boolean {
+        var result = false
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            result = true
+        }
+        return result
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(), arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
+            My_LOCATION_PERMISSION_ID
+        )
+    }
+
+    private fun isLocationIsEnabled(): Boolean {
+        val locationManager: LocationManager
+        = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData() {
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        fusedClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper())
+    }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val latitude = data?.getDoubleExtra("latitude", 0.0) ?: 0.0
+            val longitude = data?.getDoubleExtra("longitude", 0.0) ?: 0.0
+
+            this.longitude = longitude
+            this.latitude =latitude
+            println("long $longitude")
+            println("loc $latitude")
+            viewModel.longitude.value = longitude
+            viewModel.latitude.value = latitude
+//            forcastViewModel.getAllProducts(latitude,longitude,"en","")
+
+
+
+
+
+        }
+    }
+
 
 
 }
