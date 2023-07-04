@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.weatherapplication.R
 import com.example.weatherapplication.databinding.DaycustomitemBinding
 import com.example.weatherforecastapp.ui.home.model.Daily
 import java.text.SimpleDateFormat
@@ -33,11 +34,13 @@ class DayAdatper(val context: Context, var myListener:(Daily)->Unit):
 //        holder.binding.temperatureTextview.text = currentObject.temp.toString()
         holder.binding.weatherTextview.text = currentObject.weather[0].description
         when (currentObject.weather[0].icon) {
-            "01d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
+//        "10d"->    Glide.with(context).load(R.drawable.rain2gif).into(holder.binding.photoImageview)
+
+                "01d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
             "02d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)
             "03d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_cloudy_weather)
             "09d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.rainy)
-            "10d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.rain_svgrepo_com)
+            "10d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.iconsrain)
             "11d" ->holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_storm_weather)
             "13d" -> holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_snow_weather)
             "01n" ->holder.binding.photoImageview.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)

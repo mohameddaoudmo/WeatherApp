@@ -28,7 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/imagehourly"
+            android:fontFamily="@font/andika_new_basic"
             android:text="9:00 AM"
+            android:textColor="#FFFFFF"
             android:textSize="18sp" />
 
         <TextView
@@ -37,7 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/timeTextView"
             android:layout_toEndOf="@id/imagehourly"
+            android:fontFamily="@font/andika_new_basic"
             android:text="25°C"
+            android:textColor="#FAF9F9"
             android:textSize="18sp" />
 
     </RelativeLayout>
