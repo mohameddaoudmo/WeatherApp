@@ -6,4 +6,8 @@
         <item>@font/holtwood_one_sc</item>
         <item>@font/viga</item>
     </array>
+
+
+        <dimen name="item_spacing">16dp</dimen>
+
 </resources>

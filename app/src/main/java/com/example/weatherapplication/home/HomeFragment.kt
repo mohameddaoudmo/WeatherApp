@@ -17,6 +17,7 @@ import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
+import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.example.weatherforecastapp.ui.home.model.Daily
@@ -102,7 +103,8 @@ class HomeFragment : Fragment() {
 
         }
 
-
+        val spacing = resources.getDimensionPixelSize(R.dimen.item_spacing)
+        binding.rcday.addItemDecoration(ItemspaceDco(spacing))
         forcastViewModelFactory =
             AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
         forcastViewModel = ViewModelProvider(
