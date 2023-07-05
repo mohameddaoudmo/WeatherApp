@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     var timeZoneS: String? = ""
     var language: String = ""
     var unit: String = ""
-    var gps:Boolean =false
+    var gps:Boolean =true
     lateinit var fusedClient: FusedLocationProviderClient
 
     private lateinit var hours: List<Hourly>
@@ -229,6 +229,8 @@ println(it)
             if (it=="gps"){
                 gps=true
             }
+            else{
+                gps=false}
 
         }
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
