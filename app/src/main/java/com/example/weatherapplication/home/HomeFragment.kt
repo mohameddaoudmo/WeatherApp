@@ -18,7 +18,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -214,7 +213,7 @@ class HomeFragment : Fragment() {
         }
         viewModel.language.observe(viewLifecycleOwner) {
             language = it
-            forcastViewModel.getAllProducts(latitude, longitude, language, unit)
+            forcastViewModel.getWeather(latitude, longitude, language, unit)
 
         }
         viewModel.unitfortemp.observe(viewLifecycleOwner) {
@@ -235,7 +234,7 @@ println(it)
         }
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
             this.latitude = latitude
-            forcastViewModel.getAllProducts(latitude, longitude, language, unit)
+            forcastViewModel.getWeather(latitude, longitude, language, unit)
 
 
             try {
@@ -265,7 +264,7 @@ println(it)
             if (gps){
           longitude =lastLocation?.longitude ?:0.0
             latitude = lastLocation?.latitude?:0.0}
-            forcastViewModel.getAllProducts(lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, language, unit)
+            forcastViewModel.getWeather(lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, language, unit)
 
 
             try {

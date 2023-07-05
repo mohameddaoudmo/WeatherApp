@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import androidx.lifecycle.viewModelScope
 import com.example.designpattern.model.RepositioryInterface
 import com.example.designpattern.network.NetworkState
+import com.example.weatherapplication.model.Favorite
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -21,10 +22,10 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
     }
 
 
-     fun getAllProducts(  lat: Double,
-                                 lon: Double,
-                                 lang: String,
-                                 unit: String,) {
+     fun getWeather(lat: Double,
+                    lon: Double,
+                    lang: String,
+                    unit: String,) {
         println("$lat $lang in view model")
         viewModelScope.launch {
             repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
@@ -42,14 +43,10 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
             }
         }
     }
-    fun senddata( lat:Double, lon:Double, lang:String, unit:String) {
-        repoInterface.getCurrentWeather(lat,lon,lang,unit)
 
-    }
-
-    fun addToFavorites(product: Product){
+    fun addToFavorites(favorite: Favorite){
         viewModelScope.launch (Dispatchers.IO){
-            repoInterface.addToFavorites(product)
+            repoInterface.addToFavorites(favorite)
         }
     }
 }
