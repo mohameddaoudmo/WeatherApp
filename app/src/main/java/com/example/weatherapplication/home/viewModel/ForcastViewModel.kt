@@ -18,7 +18,12 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
         MutableStateFlow(NetworkState.Loading)
     val productsStateFlow: StateFlow<NetworkState>
         get() = _productsMutableStateFlow
+    private val _savedLocationMutableStateFlow: MutableStateFlow<List<Favorite>> =
+        MutableStateFlow(emptyList())
+    val savedProductsStateFlow: StateFlow<List<Favorite>>
+        get() = _savedLocationMutableStateFlow
     init {
+
     }
 
 
@@ -47,6 +52,22 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
     fun addToFavorites(favorite: Favorite){
         viewModelScope.launch (Dispatchers.IO){
             repoInterface.addToFavorites(favorite)
+        }
+    }
+
+    fun getSavedProducts() {
+        viewModelScope.launch {
+            repoInterface.getFromDatabase().collect {
+                _savedLocationMutableStateFlow.value  = it
+            println("impir$it.get(0).place")
+            }
+
+        }
+    }
+
+    fun deleteFromFav(favorite: Favorite) {
+        viewModelScope.launch {
+            repoInterface.removeFromFavorites(favorite)
         }
     }
 }

@@ -29,6 +29,7 @@ class Repostiory(
     override suspend fun getFromDatabase(): Flow<List<Favorite>> {
 
         return concreteLocalSource.getAlllocation()
+
     }
 
     override suspend fun saveProducts(favorites: List<Favorite>) {
