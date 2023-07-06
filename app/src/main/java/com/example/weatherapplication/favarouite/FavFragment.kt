@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
 import com.example.designpattern.allproduct.viewModel.ForcastViewModel
 import com.example.designpattern.db.ConLocalSource
@@ -27,6 +28,8 @@ class FavFragment : Fragment() {
 
     lateinit var binding : FragmentFavBinding
     var longitude: Double? = 1.0
+    private lateinit var myLayoutManager: LinearLayoutManager
+
     lateinit var geocoder: Geocoder
     lateinit var forcastViewModel: ForcastViewModel
     lateinit var forcastViewModelFactory: AllproductviewFactory
@@ -39,6 +42,8 @@ class FavFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
+
         binding.floatingActionButton.setOnClickListener{
 
             val intent = Intent(requireContext(), MapssActivity::class.java)
@@ -56,7 +61,9 @@ class FavFragment : Fragment() {
             forcastViewModel.getSavedProducts()
 
         }
-        binding.recyclerView.adapter = recyclerAdapter
+        binding.recyclerView.apply { adapter=recyclerAdapter
+        layoutManager= myLayoutManager
+        }
         lifecycleScope.launch {
             forcastViewModel.savedProductsStateFlow.collect{
                     list ->
