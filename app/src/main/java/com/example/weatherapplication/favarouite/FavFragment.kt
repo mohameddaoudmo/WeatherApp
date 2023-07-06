@@ -17,8 +17,10 @@ import com.example.designpattern.allproduct.viewModel.ForcastViewModel
 import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
+import com.example.weatherapplication.FavHome
 import com.example.weatherapplication.MapssActivity
 import com.example.weatherapplication.databinding.FragmentFavBinding
+import com.example.weatherapplication.home.HomeFragment
 import com.example.weatherapplication.model.Favorite
 import kotlinx.coroutines.launch
 
@@ -62,7 +64,11 @@ class FavFragment : Fragment() {
 //
 //        }
         recyclerAdapter = FavRecycleAdapter(requireContext(), { favorite ->
-
+            val intent = Intent(context, FavHome::class.java)
+            intent.putExtra("lat",favorite.latitude )
+            intent.putExtra("long",favorite.longitude)
+            intent.putExtra("Place",favorite.place)
+            startActivity(intent)
         }, { favorite ->
             println("$favorite in favroite")
             forcastViewModel.deleteFromFav(favorite)
