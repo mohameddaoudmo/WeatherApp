@@ -29,4 +29,5 @@
     <string name="setting">Setting</string>
     <string name="location">Location</string>
     <string name="ok">ok</string>
+    <string name="delete">Delete</string>
 </resources>

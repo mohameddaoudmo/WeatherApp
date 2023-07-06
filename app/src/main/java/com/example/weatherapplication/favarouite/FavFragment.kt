@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
 class FavFragment : Fragment() {
     lateinit var recyclerAdapter: FavRecycleAdapter
 
-    lateinit var binding : FragmentFavBinding
+    lateinit var binding: FragmentFavBinding
     var longitude: Double? = 1.0
     private lateinit var myLayoutManager: LinearLayoutManager
 
@@ -34,7 +34,7 @@ class FavFragment : Fragment() {
     lateinit var forcastViewModel: ForcastViewModel
     lateinit var forcastViewModelFactory: AllproductviewFactory
 
-    var latitude : Double? =1.0
+    var latitude: Double? = 1.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +42,9 @@ class FavFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
+        myLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
 
-        binding.floatingActionButton.setOnClickListener{
+        binding.floatingActionButton.setOnClickListener {
 
             val intent = Intent(requireContext(), MapssActivity::class.java)
             startActivityForResult(intent, 1)
@@ -57,25 +57,33 @@ class FavFragment : Fragment() {
         ).get(ForcastViewModel::class.java)
         forcastViewModel.getSavedProducts()
         geocoder = Geocoder(requireContext())
-        recyclerAdapter = FavRecycleAdapter(requireContext()) {
-            forcastViewModel.getSavedProducts()
+//        recyclerAdapter = FavRecycleAdapter(requireContext(),) {
+//            forcastViewModel.getSavedProducts()
+//
+//        }
+        recyclerAdapter = FavRecycleAdapter(requireContext(), { favorite ->
 
-        }
-        binding.recyclerView.apply { adapter=recyclerAdapter
-        layoutManager= myLayoutManager
+        }, { favorite ->
+            println("$favorite in favroite")
+            forcastViewModel.deleteFromFav(favorite)
+                forcastViewModel.getSavedProducts()
+
+        })
+        binding.recyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = myLayoutManager
         }
         lifecycleScope.launch {
-            forcastViewModel.savedProductsStateFlow.collect{
-                    list ->
-                if (list.isNotEmpty()) {
+            forcastViewModel.savedProductsStateFlow.collect { list ->
+
                     recyclerAdapter.submitList(list)
-                    println("in fav $list[0].place")
-                }
+
             }
 
         }
 
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -84,7 +92,7 @@ class FavFragment : Fragment() {
             val longitude = data?.getDoubleExtra("longitude", 0.0) ?: 0.0
 
             this.longitude = longitude
-            this.latitude =latitude
+            this.latitude = latitude
             println("long fav$longitude")
             println("loc $latitude")
             try {
@@ -92,17 +100,12 @@ class FavFragment : Fragment() {
 
                 if (x != null && x.size > 0) {
                     var country = x[0].countryName
-                    forcastViewModel.addToFavorites(Favorite(country,latitude,longitude))
+                    forcastViewModel.addToFavorites(Favorite(country, latitude, longitude))
 
                     println(x.size)
                 }
             } catch (e: Exception) {
             }
-
-
-
-
-
 
 
         }
@@ -112,8 +115,10 @@ class FavFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        binding= FragmentFavBinding.inflate(inflater,container,false)
+        binding = FragmentFavBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+
 
 }

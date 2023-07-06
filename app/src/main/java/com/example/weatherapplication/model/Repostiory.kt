@@ -41,7 +41,7 @@ class Repostiory(
     }
 
     override suspend fun removeFromFavorites(favorite: Favorite) {
-//        concreteLocalSource.delete(product)
+        concreteLocalSource.delete(favorite)
     }
 
     override fun getCurrentWeather(

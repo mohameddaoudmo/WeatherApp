@@ -11,7 +11,7 @@ import com.example.weatherapplication.databinding.CustomcountryBinding
 import com.example.weatherapplication.model.Favorite
 
 
-class FavRecycleAdapter(private val context: Context, val myListener: (Favorite)->Unit) : ListAdapter<Favorite, FavRecycleAdapter.ProductViewHolder>(ProductDiff()) {
+class FavRecycleAdapter(private val context: Context, val myListener: (Favorite)->Unit,val delete: (Favorite)->Unit) : ListAdapter<Favorite, FavRecycleAdapter.ProductViewHolder>(ProductDiff()) {
 
 
     lateinit var binding: CustomcountryBinding
@@ -30,6 +30,9 @@ class FavRecycleAdapter(private val context: Context, val myListener: (Favorite)
 
         holder.binding.layout.setOnClickListener {
             myListener(currentItem)
+        }
+        holder.binding.button.setOnClickListener {
+            delete(currentItem)
         }
     }
 
