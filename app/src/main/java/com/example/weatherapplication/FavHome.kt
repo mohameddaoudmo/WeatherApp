@@ -5,6 +5,7 @@ import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +35,8 @@ class FavHome : AppCompatActivity() {
     var timeZoneS: String? = ""
     var language: String = ""
     var unit: String = ""
+
+    var land: String? = ""
     var gps: Boolean = true
     lateinit var fusedClient: FusedLocationProviderClient
     private lateinit var hours: List<Hourly>
@@ -54,28 +57,37 @@ class FavHome : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavHomeBinding.inflate(layoutInflater)
-
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         setContentView(binding.root)
-        longitude = getIntent().getDoubleExtra("long",1.5)
-        latitude =getIntent().getDoubleExtra("lat",1.5)
+        longitude = getIntent().getDoubleExtra("long", 1.5)
+        latitude = getIntent().getDoubleExtra("lat", 1.5)
+        land = getIntent().getStringExtra("place")
 
         geocoder = Geocoder(this)
 
         viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-        dayLayoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        dayLayoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         fusedClient = LocationServices.getFusedLocationProviderClient(this)
 
-        myLayoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
-        recyclerAdapter =RecyclerAdapter(this)
-        dayAdatper = DayAdatper(this){
+        myLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerAdapter = RecyclerAdapter(this)
+        dayAdatper = DayAdatper(this) {
 
         }
 
 
 
-        binding.rchour.apply { adapter= recyclerAdapter
-            layoutManager = myLayoutManager }
-        binding.rcday.apply { adapter= dayAdatper
+        binding.rchour.apply {
+            adapter = recyclerAdapter
+            layoutManager = myLayoutManager
+        }
+        binding.rcday.apply {
+            adapter = dayAdatper
             layoutManager = dayLayoutManager
 
         }
@@ -144,8 +156,8 @@ class FavHome : AppCompatActivity() {
                             "01d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
                             "02d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)
                             "03d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_cloudy_weather)
-                            "09d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
-                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rain_svgrepo_com)
+                            "09d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_rainy_weather)
+                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_rainy_weather)
                             "11d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_storm_weather)
                             "13d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_snow_weather)
                             "01n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
@@ -171,7 +183,7 @@ class FavHome : AppCompatActivity() {
         }
         try {
             val x = geocoder.getFromLocation(latitude, this.longitude, 5)
-
+            binding.country.text = land
             if (x != null && x.size > 0) {
                 binding.country.text = x[0].countryName
                 binding.place.text = x[0].adminArea
