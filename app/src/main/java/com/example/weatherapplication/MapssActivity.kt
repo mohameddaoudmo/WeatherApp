@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.animation.ObjectAnimator;
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import com.example.weatherapplication.databinding.ActivityDialogBinding
 import com.example.weatherapplication.databinding.ActivityMapssBinding
+import com.google.android.gms.common.api.Status
 
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -17,17 +19,38 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 
 
 class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapClickListener {
 
     private lateinit var mMap: GoogleMap
 lateinit var binding : ActivityMapssBinding
+lateinit var autocomplete :AutocompleteSupportFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.map)
+        setContentView(R.layout.activity_mapss)
+        Places.initialize(applicationContext,"AIzaSyB2ABcZ9Yg_54ZEJgy0ZxcOTRgPbPSpu4M")
+        autocomplete= supportFragmentManager.findFragmentById(R.id.autoComplete)as AutocompleteSupportFragment
+        autocomplete.setPlaceFields(listOf(Place.Field.ID,Place.Field.ADDRESS,Place.Field.LAT_LNG) )
+        autocomplete.setOnPlaceSelectedListener(object :PlaceSelectionListener{
+            override fun onError(p0: Status) {
+println(p0.statusMessage)
+            }
+
+            override fun onPlaceSelected(place: Place) {
+
+                val latLng=place.latLng
+                zoomOnMap(latLng )
+            }
+        })
+
+
         window.setFlags(
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -52,5 +75,9 @@ lateinit var binding : ActivityMapssBinding
         returnIntent.putExtra("longitude", latLng.longitude)
         setResult(Activity.RESULT_OK, returnIntent)
         finish()
+    }
+    private fun zoomOnMap(latLng: LatLng){
+        val latlngzoom= CameraUpdateFactory.newLatLngZoom(latLng,12f)
+        mMap?.animateCamera(latlngzoom)
     }
 }
