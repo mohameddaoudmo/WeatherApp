@@ -21,6 +21,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/bottombar"
         android:fontFamily="@font/bevan"
-        android:text="@string/delete" />
+        android:text="@string/delete"
+        android:textColor="#F8F5F5" />
 
 </LinearLayout>
