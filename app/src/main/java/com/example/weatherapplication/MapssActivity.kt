@@ -5,9 +5,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.animation.ObjectAnimator;
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.weatherapplication.databinding.ActivityDialogBinding
 import com.example.weatherapplication.databinding.ActivityMapssBinding
 import com.google.android.gms.common.api.Status
@@ -67,14 +69,37 @@ println(p0.statusMessage)
         val sydney = LatLng(26.82, 30.80)
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
         mMap.setOnMapClickListener(this)
+
     }
 
     override fun onMapClick(latLng: LatLng) {
         val returnIntent = Intent()
         returnIntent.putExtra("latitude", latLng.latitude)
         returnIntent.putExtra("longitude", latLng.longitude)
-        setResult(Activity.RESULT_OK, returnIntent)
-        finish()
+        val lat = latLng.latitude
+        val lng = latLng.longitude
+
+        // Add a marker to the clicked location
+        val marker = mMap.addMarker(MarkerOptions().position(latLng))
+
+        // Show a dialog box asking the user to confirm the selected location
+        AlertDialog.Builder(this)
+            .setTitle("Confirm selection")
+            .setMessage("Do you want to choose this location?")
+            .setPositiveButton("Yes") { dialog, which ->
+                // Save the latitude and longitude to a variable or send it to the server
+                val selectedLocation = LatLng(lat, lng)
+                Log.d("MapsActivity", "Selected location: $selectedLocation")
+                setResult(Activity.RESULT_OK, returnIntent)
+                finish()
+            }
+            .setNegativeButton("No") { dialog, which ->
+                // Remove the marker from the map
+                marker?.remove()
+            }
+            .show()
+
+
     }
     private fun zoomOnMap(latLng: LatLng){
         val latlngzoom= CameraUpdateFactory.newLatLngZoom(latLng,12f)
