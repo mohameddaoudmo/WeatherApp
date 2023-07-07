@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.animation.ObjectAnimator;
+import android.location.Geocoder
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -32,11 +33,14 @@ class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCl
     private lateinit var mMap: GoogleMap
 lateinit var binding : ActivityMapssBinding
 lateinit var autocomplete :AutocompleteSupportFragment
+    lateinit var geocoder: Geocoder
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mapss)
+        geocoder = Geocoder(this)
+
         Places.initialize(applicationContext,"AIzaSyB2ABcZ9Yg_54ZEJgy0ZxcOTRgPbPSpu4M")
         autocomplete= supportFragmentManager.findFragmentById(R.id.autoComplete)as AutocompleteSupportFragment
         autocomplete.setPlaceFields(listOf(Place.Field.ID,Place.Field.ADDRESS,Place.Field.LAT_LNG) )
@@ -81,11 +85,16 @@ println(p0.statusMessage)
 
         // Add a marker to the clicked location
         val marker = mMap.addMarker(MarkerOptions().position(latLng))
+        val x = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 5)
+        var contry:String =""
+        if (x != null && x.size > 0) {
+            contry= x[0].countryName
 
-        // Show a dialog box asking the user to confirm the selected location
+            println(x.size)
+        }        // Show a dialog box asking the user to confirm the selected location
         AlertDialog.Builder(this)
             .setTitle("Confirm selection")
-            .setMessage("Do you want to choose this location?")
+            .setMessage("Do you want to choose this $contry?")
             .setPositiveButton("Yes") { dialog, which ->
                 // Save the latitude and longitude to a variable or send it to the server
                 val selectedLocation = LatLng(lat, lng)
