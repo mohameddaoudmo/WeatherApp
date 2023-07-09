@@ -17,7 +17,7 @@
         android:theme="@style/Theme.WeatherApplication"
         tools:targetApi="31" >
         <activity
-            android:name=".FavHome"
+            android:name=".favarouite.FavHome"
             android:exported="false" >
             <meta-data
                 android:name="android.app.lib_name"

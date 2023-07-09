@@ -20,7 +20,7 @@
         android:layout_marginLeft="180dp"
         android:layout_marginRight="10dp"
         android:background="@drawable/bottombar"
-        android:fontFamily="@font/aldrich"
+        android:fontFamily="sans-serif-black"
         android:text="@string/delete"
         android:textColor="#F8F5F5" />
 

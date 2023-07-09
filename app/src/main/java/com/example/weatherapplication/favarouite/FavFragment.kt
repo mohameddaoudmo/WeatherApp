@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,10 +16,8 @@ import com.example.designpattern.allproduct.viewModel.ForcastViewModel
 import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
-import com.example.weatherapplication.FavHome
 import com.example.weatherapplication.MapssActivity
 import com.example.weatherapplication.databinding.FragmentFavBinding
-import com.example.weatherapplication.home.HomeFragment
 import com.example.weatherapplication.model.Favorite
 import kotlinx.coroutines.launch
 

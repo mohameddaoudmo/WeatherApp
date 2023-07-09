@@ -1,4 +1,4 @@
-package com.example.weatherapplication
+package com.example.weatherapplication.favarouite
 
 import android.graphics.drawable.AnimationDrawable
 import android.location.Geocoder
@@ -15,6 +15,8 @@ import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
+import com.example.weatherapplication.R
+import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.ActivityFavHomeBinding
 import com.example.weatherapplication.home.DayAdatper
 import com.example.weatherapplication.home.ItemspaceDco
@@ -153,18 +155,18 @@ class FavHome : AppCompatActivity() {
 
 
                         when (result.myResponse.current.weather[0].icon) {
-                            "01d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
-                            "02d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)
-                            "03d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_cloudy_weather)
-                            "09d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_rainy_weather)
-                            "10d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_rainy_weather)
-                            "11d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_storm_weather)
-                            "13d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_snow_weather)
-                            "01n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
-                            "03n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
-                            "04d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
+                            "01d" -> binding.imageforweather.setImageResource(R.drawable.ic_clear_day)
+                            "02d" -> binding.imageforweather.setImageResource(R.drawable.ic_few_clouds)
+                            "03d" -> binding.imageforweather.setImageResource(R.drawable.ic_cloudy_weather)
+                            "09d" -> binding.imageforweather.setImageResource(R.drawable.ic_rainy_weather)
+                            "10d" -> binding.imageforweather.setImageResource(R.drawable.ic_rainy_weather)
+                            "11d" -> binding.imageforweather.setImageResource(R.drawable.ic_storm_weather)
+                            "13d" -> binding.imageforweather.setImageResource(R.drawable.ic_snow_weather)
+                            "01n" -> binding.imageforweather.setImageResource(R.drawable.ic_clear_day)
+                            "03n" -> binding.imageforweather.setImageResource(R.drawable.ic_mostly_cloudy)
+                            "04d" -> binding.imageforweather.setImageResource(R.drawable.ic_mostly_cloudy)
 
-                            "09n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
+                            "09n" -> binding.imageforweather.setImageResource(R.drawable.rainy)
 
                         }
 
