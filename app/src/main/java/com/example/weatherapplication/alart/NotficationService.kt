@@ -36,15 +36,16 @@ class NotficationService(
         }}
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun showNotification(text: String, statusofNotfication: Boolean) {
+    fun showNotification(text: String, statusofNotfication: Boolean,land :String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotficicationChannal()
 
 
             val notification = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
+
                 .setSmallIcon(R.drawable.baseline_add_alert_24)
                 .setContentTitle("Weather Status")
-                .setContentText("The Status of weather now is $text")
+                .setContentText("The Status of weather now is $text in $land")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             if (statusofNotfication) {
                 notification.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

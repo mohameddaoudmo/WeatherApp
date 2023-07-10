@@ -24,6 +24,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) :  CoroutineWor
         val long = inputData.getDouble("long",0.0)
         val lat = inputData.getDouble("lat", 0.0)
         val sound = inputData.getBoolean("sound", true)
+        val land = inputData.getString("land")
         val x = Api.apiService.getCurrentWeatherByLatAndLon(lat,long,"en","")
         flowOf(x).catch {
                 NetworkState.Failure(it.message!!)
@@ -39,7 +40,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) :  CoroutineWor
             }
 
         notficationService.createNotficicationChannal()
-        notficationService.showNotification(weatherStatus,sound )
+        notficationService.showNotification(weatherStatus,sound,land?:"" )
         return Result.success();    }
 
 

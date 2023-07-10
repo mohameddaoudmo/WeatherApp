@@ -1,8 +1,10 @@
 package com.example.weatherapplication.alart
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,10 +17,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.example.weatherapplication.MapssActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentAlertBinding
 import com.example.weatherapplication.databinding.FragmentDialogForAlertBinding
+import com.example.weatherapplication.databinding.MenuLayoutBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -37,9 +41,11 @@ class AlertFragment : Fragment() {
     lateinit var viewModel: SharedViewModel
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
+    private var land:String? =""
     private lateinit var dialog: AlertDialog
     private lateinit var bindingDialog: FragmentDialogForAlertBinding
     lateinit var binding: FragmentAlertBinding
+    lateinit var layoutmenubinding: MenuLayoutBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -52,10 +58,9 @@ class AlertFragment : Fragment() {
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
-
-        binding.floatingActionButton.setOnClickListener {
-
-            dialog.show()
+layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
+        binding.fabMain.setOnClickListener {
+            toggle()
 
 
         }
@@ -163,6 +168,7 @@ class AlertFragment : Fragment() {
             val data = Data.Builder()
                 .putDouble("lat", latitude)
                 .putDouble("long", longitude)
+                .putString("land",land)
                 .putBoolean("sound", true)
                 .build()
             val myContext = requireContext()
@@ -186,12 +192,73 @@ class AlertFragment : Fragment() {
     ): View? {
         binding = FragmentAlertBinding.inflate(inflater, container, false)
         bindingDialog = FragmentDialogForAlertBinding.inflate(inflater, null, false)
+        layoutmenubinding = MenuLayoutBinding.inflate(inflater, null, false)
+
 
         viewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
         return binding.root
     }
 
+    private fun toggle() {
+        if (isMenuOpen) {
+            removeMenu()
+        } else {
+            showMenu()
+        }
+        isMenuOpen = !isMenuOpen
+    }
+    private fun showMenu() {
+        val inflater = LayoutInflater.from(requireContext())
+        menuLayout = inflater.inflate(R.layout.menu_layout, null) as LinearLayout
+        val layoutParams = CoordinatorLayout.LayoutParams(
+            CoordinatorLayout.LayoutParams.WRAP_CONTENT,
+            CoordinatorLayout.LayoutParams.WRAP_CONTENT
+        )
+        layoutParams.gravity = Gravity.TOP or Gravity.END
+        layoutParams.setMargins(16, 16, 16, 16)
+        layoutParams.anchorGravity = Gravity.TOP or Gravity.END
+        layoutParams.anchorId = R.id.fabMain
+        menuLayout.layoutParams = layoutParams
+        menuLayout.findViewById<View>(R.id.fbtime).setOnClickListener { dialog.show()
+    print("AAAAAAAAAa")
+    }
+        menuLayout.findViewById<View>(R.id.fbaddlocation).setOnClickListener {
 
- 
+            val intent = Intent(requireContext(), MapssActivity::class.java)
+            startActivityForResult(intent, 1)
+        }
+        val coordinatorLayout: CoordinatorLayout =binding.coordinatorLayout
+        coordinatorLayout.addView(menuLayout)
+    }
+
+    private fun removeMenu() {
+        if (menuLayout != null && menuLayout.parent != null) {
+            val coordinatorLayout: CoordinatorLayout =
+                binding.coordinatorLayout
+            coordinatorLayout.removeView(menuLayout)
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val latitude = data?.getDoubleExtra("latitude", 0.0) ?: 0.0
+            val longitude = data?.getDoubleExtra("longitude", 0.0) ?: 0.0
+            val land = data?.getStringExtra("land")
+
+            this.longitude = longitude
+            this.latitude =latitude
+            this.land =land
+            println("long $longitude")
+            println("loc $latitude")
+
+
+
+
+
+
+        }
+    }
+
 }

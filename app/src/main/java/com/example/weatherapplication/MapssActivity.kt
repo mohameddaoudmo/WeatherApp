@@ -89,6 +89,7 @@ println(p0.statusMessage)
         var contry:String =""
         if (x != null && x.size > 0) {
             contry= x[0].countryName
+            returnIntent.putExtra("land", contry)
 
             println(x.size)
         }        // Show a dialog box asking the user to confirm the selected location
