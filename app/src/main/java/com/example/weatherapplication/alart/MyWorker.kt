@@ -4,14 +4,9 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.example.designpattern.db.ConLocalSource
-import com.example.designpattern.model.RepositioryInterface
-import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.Api
 import com.example.designpattern.network.NetworkState
-import com.example.designpattern.network.RemoteSource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOf
 
@@ -23,8 +18,12 @@ class MyWorker(context: Context, workerParams: WorkerParameters) :  CoroutineWor
         val inputData = inputData
         val long = inputData.getDouble("long",0.0)
         val lat = inputData.getDouble("lat", 0.0)
-        val sound = inputData.getBoolean("sound", true)
+        val sound = inputData.getBoolean("sound",false)
         val land = inputData.getString("land")
+        val starttime =inputData.getDouble("startTime",0.0)
+        val endtime =inputData.getDouble("endTime",0.0)
+        val currentTime = System.currentTimeMillis()
+//        if (currentTime >= starttime && currentTime <= endtime) {
         val x = Api.apiService.getCurrentWeatherByLatAndLon(lat,long,"en","")
         flowOf(x).catch {
                 NetworkState.Failure(it.message!!)
@@ -38,6 +37,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) :  CoroutineWor
                 }
 
             }
+
 
         notficationService.createNotficicationChannal()
         notficationService.showNotification(weatherStatus,sound,land?:"" )

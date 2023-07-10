@@ -10,7 +10,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit
 
 class AlertFragment : Fragment() {
     lateinit var  menuLayout: LinearLayout
+    private lateinit var spinner: Spinner
+    private var alarm :Boolean = false
 
     private var isMenuOpen = false
     private lateinit var builder: AlertDialog.Builder
@@ -64,6 +66,28 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
 
 
         }
+                spinner= bindingDialog.soundSpinne
+        val adapter = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.sound_options,
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedItem = parent?.getItemAtPosition(position).toString()
+                if(selectedItem=="Alarm sound"){
+                    alarm =true
+                }
+                else{
+                    alarm =false
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
 
         bindingDialog.startimageview.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -82,10 +106,10 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             startT = calendar.timeInMillis
                             println(startT)
                             val currentTime = System.currentTimeMillis()
-                            val notificationTime = calendar.timeInMillis
-                            delay = notificationTime - currentTime
+                            val notificationStartTime = calendar.timeInMillis
+                            delay = notificationStartTime - currentTime
                             println("currrrent $currentTime")
-                            println("nofffffffffffff $notificationTime")
+                            println("nofffffffffffff $notificationStartTime")
 
                             val formattedDateTime =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(
@@ -123,8 +147,10 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                             calendar.set(Calendar.MINUTE, minute)
-                            startT = calendar.timeInMillis
-                            println(startT)
+                            val notificationendTime = calendar.timeInMillis
+
+                            endT = notificationendTime
+                            println(endT)
 
                             val formattedDateTime =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(
@@ -147,29 +173,31 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
         }
 
         viewModel.longitudegps.observe(viewLifecycleOwner) { longitude ->
-            this.longitude = longitude
+//            this.longitude = longitude
         }
 
         viewModel.latitudegps.observe(viewLifecycleOwner) { latitude ->
-            this.latitude = latitude
+//            this.latitude = latitude
         }
 
         bindingDialog.setAlarmButto.setOnClickListener {
-//            if (longitude == 0.0 || latitude == 0.0) {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "GPS coordinates not available",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                return@setOnClickListener
-//            }
+            if (longitude == 0.0 || latitude == 0.0) {
+                Toast.makeText(
+                    requireContext(),
+                    "GPS coordinates not available , You Should set location frist",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
 
-            // Create and enqueue the work request
             val data = Data.Builder()
                 .putDouble("lat", latitude)
                 .putDouble("long", longitude)
                 .putString("land",land)
-                .putBoolean("sound", true)
+                .putBoolean("sound", alarm)
+                .putLong("startTime",startT)
+                .putLong("endTime",endT)
+
                 .build()
             val myContext = requireContext()
             val workRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)

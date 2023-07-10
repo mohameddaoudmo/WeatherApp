@@ -16,7 +16,6 @@ import com.example.weatherapplication.databinding.FragmentDialogForAlertBinding
 class DialogFragmentForAlert : DialogFragment() {
 
     private lateinit var binding : FragmentDialogForAlertBinding
-    private lateinit var spinner: Spinner
     private var startD: Long = 0L
     private var endD: Long = 0L
     private var startT: Long = 0L
@@ -53,24 +52,7 @@ class DialogFragmentForAlert : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         dismiss()
-//        spinner= binding.soundSpinne
-//        val adapter = ArrayAdapter.createFromResource(
-//            requireContext(),
-//            R.array.sound_options,
-//            android.R.layout.simple_spinner_item
-//        )
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        spinner.adapter = adapter
-//        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-//                val selectedItem = parent?.getItemAtPosition(position).toString()
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//        }
-//        binding.setAlarmButto.setOnClickListener {
-//        }
+
     }
 
 
