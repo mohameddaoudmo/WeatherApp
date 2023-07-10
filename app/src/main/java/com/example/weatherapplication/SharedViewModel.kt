@@ -11,6 +11,8 @@ class SharedViewModel : ViewModel() {
     var unitfortemp : MutableLiveData <String> = MutableLiveData<String>()
     var unitforwind : MutableLiveData <String> = MutableLiveData<String>()
     var language : MutableLiveData <String> = MutableLiveData<String>()
+    var longitudegps:  MutableLiveData <Double> = MutableLiveData<Double>(0.0)
+    var latitudegps:  MutableLiveData <Double> =MutableLiveData<Double>(0.0)
 
 
 

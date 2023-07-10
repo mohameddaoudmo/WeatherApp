@@ -40,7 +40,6 @@ object ApiClient : RemoteSource {
 
             val x = Api.apiService.getCurrentWeatherByLatAndLon(lat,lon,lang,unit)
             return flowOf(x)
-        println("$latitude  $longitude mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
 
 
 

@@ -22,6 +22,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
 import com.example.designpattern.allproduct.viewModel.ForcastViewModel
 import com.example.designpattern.db.ConLocalSource
@@ -31,6 +34,7 @@ import com.example.designpattern.network.NetworkState
 import com.example.weatherapplication.My_LOCATION_PERMISSION_ID
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedViewModel
+import com.example.weatherapplication.alart.MyWorker
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.example.weatherforecastapp.ui.home.model.Daily
 import com.example.weatherforecastapp.ui.home.model.Hourly
@@ -105,6 +109,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         dayLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
         fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -259,8 +264,13 @@ println(it)
         override fun onLocationResult(locationResult: LocationResult) {
             super.onLocationResult(locationResult)
             val lastLocation = locationResult.lastLocation
-            println(lastLocation?.latitude)
+            println("gps ${lastLocation?.latitude}")
             println(lastLocation?.longitude)
+
+           viewModel.longitudegps.value =lastLocation?.longitude ?:0.0
+            viewModel.latitudegps.value =lastLocation?.latitude ?:0.0
+
+
             if (gps){
           longitude =lastLocation?.longitude ?:0.0
             latitude = lastLocation?.latitude?:0.0}
