@@ -2,6 +2,7 @@ package com.example.designpattern.model
 
 import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.network.RemoteSource
+import com.example.weatherapplication.model.Alert
 import com.example.weatherapplication.model.Favorite
 import com.example.weatherforecastapp.ui.home.model.Forecast
 import kotlinx.coroutines.flow.Flow
@@ -43,6 +44,18 @@ class Repostiory(
     override suspend fun removeFromFavorites(favorite: Favorite) {
         concreteLocalSource.delete(favorite)
     }
+
+    override suspend fun getFromDatabaseAlart(): Flow<List<Alert>> {
+        return concreteLocalSource.getAllAlart()
+    }
+
+
+    override suspend fun addToAlart(alart: Alert) {
+        concreteLocalSource.insertAlart(alart)
+    }
+
+    override suspend fun removeFromAlart(alart: Alert) {
+concreteLocalSource.deleteAlart(alart)    }
 
     override fun getCurrentWeather(
         

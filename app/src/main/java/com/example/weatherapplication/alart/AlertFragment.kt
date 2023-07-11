@@ -14,15 +14,25 @@ import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.designpattern.allproduct.viewModel.AllproductviewFactory
+import com.example.designpattern.allproduct.viewModel.ForcastViewModel
+import com.example.designpattern.db.ConLocalSource
+import com.example.designpattern.model.Repostiory
+import com.example.designpattern.network.ApiClient
 import com.example.weatherapplication.MapssActivity
 import com.example.weatherapplication.R
 import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.databinding.FragmentAlertBinding
 import com.example.weatherapplication.databinding.FragmentDialogForAlertBinding
 import com.example.weatherapplication.databinding.MenuLayoutBinding
+import com.example.weatherapplication.favarouite.FavRecycleAdapter
+import com.example.weatherapplication.model.Alert
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.util.*
@@ -33,7 +43,13 @@ class AlertFragment : Fragment() {
     lateinit var  menuLayout: LinearLayout
     private lateinit var spinner: Spinner
     private var alarm :Boolean = false
-
+    private lateinit var myLayoutManager: LinearLayoutManager
+    lateinit var recyclerAdapter: AlartAdapter
+    lateinit var forcastViewModel: ForcastViewModel
+    lateinit var forcastViewModelFactory: AllproductviewFactory
+    var formattedendDateTime:String =""
+    var formattedStartDateTime:String=""
+lateinit var workManager: WorkManager
 
     private var isMenuOpen = false
     private lateinit var builder: AlertDialog.Builder
@@ -54,6 +70,22 @@ class AlertFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        workManager=WorkManager.getInstance(requireContext())
+        forcastViewModelFactory =
+            AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
+        forcastViewModel = ViewModelProvider(
+            this,
+            forcastViewModelFactory
+        ).get(ForcastViewModel::class.java)
+        myLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
+recyclerAdapter = AlartAdapter(requireContext()){
+    forcastViewModel.deleteFromFav(it)
+    workManager.cancelAllWorkByTag(it.startTime)
+
+
+}
+        binding.recyclerView.apply {   adapter = recyclerAdapter
+            layoutManager = myLayoutManager }
         var dialogs = DialogFragmentForAlert()
         dialogs.show(requireFragmentManager(), "dialog")
         builder = AlertDialog.Builder(requireContext())
@@ -91,7 +123,7 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-
+bindingDialog.button2.setOnClickListener { dialog.dismiss() }
         bindingDialog.startimageview.setOnClickListener {
             val calendar = Calendar.getInstance()
 
@@ -114,11 +146,11 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             println("currrrent $currentTime")
                             println("nofffffffffffff $notificationStartTime")
 
-                            val formattedDateTime =
+                             formattedStartDateTime =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(
                                     calendar.time
                                 )
-                            bindingDialog.startTimeTextvie.text = "Start time is $formattedDateTime"
+                            bindingDialog.startTimeTextvie.text = "Start time is $formattedStartDateTime"
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -156,11 +188,11 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             delayForEnd = notificationendTime - currentTime
                             println(endT)
 
-                            val formattedDateTime =
+                            formattedendDateTime =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(
                                     calendar.time
                                 )
-                            bindingDialog.endTimeTextvie.text = "end time is $formattedDateTime"
+                            bindingDialog.endTimeTextvie.text = "end time is $formattedendDateTime"
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -183,6 +215,16 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
         viewModel.latitudegps.observe(viewLifecycleOwner) { latitude ->
 //            this.latitude = latitude
         }
+        forcastViewModel.getsavedAlert()
+        lifecycleScope.launch {
+            forcastViewModel.savedalartStateFlow.collect { list ->
+
+                recyclerAdapter.submitList(list)
+
+            }
+
+        }
+
 
         bindingDialog.setAlarmButto.setOnClickListener {
             if (longitude == 0.0 || latitude == 0.0) {
@@ -208,12 +250,12 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                 .setInitialDelay(delayForStart, TimeUnit.MILLISECONDS)
                 .keepResultsForAtLeast(delayForStart-delayForEnd,TimeUnit.MILLISECONDS)
                 .setInputData(data)
-                .addTag(land?:"")
+                .addTag(formattedStartDateTime?:"")
                 .build()
 
 
-            WorkManager.getInstance(myContext).enqueue(workRequest)
-
+            workManager.enqueue(workRequest)
+forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,land?:"",""))
             if (::dialog.isInitialized) {
                 dialog.dismiss()
 

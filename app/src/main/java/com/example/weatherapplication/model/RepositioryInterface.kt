@@ -1,6 +1,7 @@
 package com.example.designpattern.model
 
 import android.content.Context
+import com.example.weatherapplication.model.Alert
 import com.example.weatherapplication.model.Favorite
 import com.example.weatherforecastapp.ui.home.model.Forecast
 import kotlinx.coroutines.flow.Flow
@@ -16,6 +17,9 @@ interface RepositioryInterface  {
     suspend fun saveProducts(favorite : List<Favorite>)
     suspend fun addToFavorites(favorite: Favorite)
     suspend fun removeFromFavorites(favorite: Favorite)
+    suspend fun getFromDatabaseAlart() : Flow<List<Alert>>
+    suspend fun addToAlart(alart: Alert)
+    suspend fun removeFromAlart(alart: Alert)
     fun getCurrentWeather(
 
         lat: Double,

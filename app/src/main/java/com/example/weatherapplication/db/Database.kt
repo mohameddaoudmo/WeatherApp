@@ -3,10 +3,11 @@ package com.example.day1
 import android.content.Context
 import androidx.room.*
 import com.example.designpattern.model.Product
+import com.example.weatherapplication.model.Alert
 import com.example.weatherapplication.model.Favorite
 
 
-@Database (entities = arrayOf(Favorite::class), version = 1)
+@Database (entities = arrayOf(Favorite::class,Alert::class), version = 1)
 @TypeConverters(Converters::class)
 
 abstract class productDatabase :RoomDatabase() {

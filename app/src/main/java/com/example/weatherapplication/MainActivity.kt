@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         )
         window.decorView.systemUiVisibility =
             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+        window.decorView.setSystemUiVisibility(window.decorView.systemUiVisibility)
 //        drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
         navigationView = findViewById<NavigationView>(R.id.nav_view)
 //        val actionBar = supportActionBar

@@ -2,17 +2,14 @@ package com.example.weatherapplication.model
 
 import androidx.room.*
 
-@Entity(tableName = "alerts")
+@Entity(tableName = "alert")
 data class Alert(
-    val description: String,
-    val startDate: String,
-    val endDate: String,
+    @PrimaryKey()
     val startTime: String,
     val endTime: String,
-    val event: String="Rain",
-    val sender_name: String="Azza",
+    val land :String,
+    val type :String
 ){
 
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0
+
 }
