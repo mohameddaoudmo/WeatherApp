@@ -1,6 +1,8 @@
 package com.example.weatherapplication.home
 
 import android.content.Context
+
+import android.content.Context.MODE_PRIVATE
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.example.weatherapplication.R
 import com.example.weatherforecastapp.ui.home.model.Hourly
 import com.google.type.DateTime
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -31,11 +34,22 @@ class RecyclerAdapter(private val context: Context):ListAdapter<Hourly,RecyclerA
 
 
     override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
+        val sharedPref = context.getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
+var language =sharedPref.getString("language", "")
         val hourly = getItem(position)
         val sdf = SimpleDateFormat("hh:00 aaa")
         val date = Date(hourly.dt.toLong() * 1000)
+
+        if(language=="ar"){
+            val sdf = SimpleDateFormat("hh:.. aaa", Locale("ar"))
+            val date = Date(hourly.dt.toLong() * 1000)
+            val formattedTime = sdf.format(date)
+            val arabicFormat = NumberFormat.getInstance(Locale("ar"))
+            holder.hour.text =formattedTime
+            holder.temprature.text= arabicFormat.format(hourly.temp)
+        }else{
         holder.hour.text =sdf.format(date)
-        holder.temprature.text= hourly.temp.toString()
+        holder.temprature.text= hourly.temp.toString()}
         when (hourly.weather[0].icon) {
             "01d" -> holder.Image.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
             "02d" -> holder.Image.setImageResource(com.example.weatherapplication.R.drawable.ic_few_clouds)

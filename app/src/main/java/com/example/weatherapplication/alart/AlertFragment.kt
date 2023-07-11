@@ -5,7 +5,10 @@ import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -40,17 +43,17 @@ import java.util.concurrent.TimeUnit
 
 
 class AlertFragment : Fragment() {
-    lateinit var  menuLayout: LinearLayout
+    lateinit var menuLayout: LinearLayout
     private lateinit var spinner: Spinner
-    private var alarm :Boolean = false
-    private var statusOfSound :String=""
+    private var alarm: Boolean = false
+    private var statusOfSound: String = ""
     private lateinit var myLayoutManager: LinearLayoutManager
     lateinit var recyclerAdapter: AlartAdapter
     lateinit var forcastViewModel: ForcastViewModel
     lateinit var forcastViewModelFactory: AllproductviewFactory
-    var formattedendDateTime:String =""
-    var formattedStartDateTime:String=""
-lateinit var workManager: WorkManager
+    var formattedendDateTime: String = ""
+    var formattedStartDateTime: String = ""
+    lateinit var workManager: WorkManager
 
     private var isMenuOpen = false
     private lateinit var builder: AlertDialog.Builder
@@ -59,11 +62,11 @@ lateinit var workManager: WorkManager
     private var startT: Long = 0L
     private var endT: Long = 0L
     var delayForStart: Long = 0L
-    var delayForEnd :Long =0L
+    var delayForEnd: Long = 0L
     lateinit var viewModel: SharedViewModel
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
-    private var land:String? =""
+    private var land: String? = ""
     private lateinit var dialog: AlertDialog
     private lateinit var bindingDialog: FragmentDialogForAlertBinding
     lateinit var binding: FragmentAlertBinding
@@ -71,7 +74,7 @@ lateinit var workManager: WorkManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        workManager=WorkManager.getInstance(requireContext())
+        workManager = WorkManager.getInstance(requireContext())
         forcastViewModelFactory =
             AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
         forcastViewModel = ViewModelProvider(
@@ -79,14 +82,16 @@ lateinit var workManager: WorkManager
             forcastViewModelFactory
         ).get(ForcastViewModel::class.java)
         myLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
-recyclerAdapter = AlartAdapter(requireContext()){
-    forcastViewModel.deleteFromFav(it)
-    workManager.cancelAllWorkByTag(it.startTime)
+        recyclerAdapter = AlartAdapter(requireContext()) {
+            forcastViewModel.deleteFromFav(it)
+            workManager.cancelAllWorkByTag(it.startTime)
 
 
-}
-        binding.recyclerView.apply {   adapter = recyclerAdapter
-            layoutManager = myLayoutManager }
+        }
+        binding.recyclerView.apply {
+            adapter = recyclerAdapter
+            layoutManager = myLayoutManager
+        }
         var dialogs = DialogFragmentForAlert()
         dialogs.show(requireFragmentManager(), "dialog")
         builder = AlertDialog.Builder(requireContext())
@@ -96,13 +101,13 @@ recyclerAdapter = AlartAdapter(requireContext()){
 
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
-layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
+        layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
         binding.fabMain.setOnClickListener {
             toggle()
 
 
         }
-                spinner= bindingDialog.soundSpinne
+        spinner = bindingDialog.soundSpinne
         val adapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.sound_options,
@@ -111,20 +116,36 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
-                if(selectedItem=="Alarm sound"){
-                    alarm =true
-statusOfSound ="Alarm sound"               }
-                else{
-                    alarm =false
+                if (selectedItem == "Alarm sound") {
+                    alarm = true
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(
+                            requireContext()
+                        )
+                    ) {
+                        val intent = Intent(
+                            Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                            Uri.parse("package:${requireContext().packageName}")
+                        )
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        requireContext().startActivity(intent)
+                    }
+                    statusOfSound = "Alarm sound"
+                } else {
+                    alarm = false
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-bindingDialog.button2.setOnClickListener { dialog.dismiss() }
+        bindingDialog.button2.setOnClickListener { dialog.dismiss() }
         bindingDialog.startimageview.setOnClickListener {
             val calendar = Calendar.getInstance()
 
@@ -147,11 +168,12 @@ bindingDialog.button2.setOnClickListener { dialog.dismiss() }
                             println("currrrent $currentTime")
                             println("nofffffffffffff $notificationStartTime")
 
-                             formattedStartDateTime =
+                            formattedStartDateTime =
                                 SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault()).format(
                                     calendar.time
                                 )
-                            bindingDialog.startTimeTextvie.text = "Start time is $formattedStartDateTime"
+                            bindingDialog.startTimeTextvie.text =
+                                "Start time is $formattedStartDateTime"
                         },
                         calendar.get(Calendar.HOUR_OF_DAY),
                         calendar.get(Calendar.MINUTE),
@@ -164,6 +186,7 @@ bindingDialog.button2.setOnClickListener { dialog.dismiss() }
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
 
             datePickerDialog.show()
 
@@ -205,6 +228,8 @@ bindingDialog.button2.setOnClickListener { dialog.dismiss() }
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
             )
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
+
             datePickerDialog.show()
 
         }
@@ -240,23 +265,30 @@ bindingDialog.button2.setOnClickListener { dialog.dismiss() }
             val data = Data.Builder()
                 .putDouble("lat", latitude)
                 .putDouble("long", longitude)
-                .putString("land",land)
+                .putString("land", land)
                 .putBoolean("sound", alarm)
-                .putLong("startTime",startT)
-                .putLong("endTime",endT)
+                .putLong("startTime", startT)
+                .putLong("endTime", endT)
 
                 .build()
             val myContext = requireContext()
             val workRequest = PeriodicWorkRequestBuilder<MyWorker>(1, TimeUnit.HOURS)
                 .setInitialDelay(delayForStart, TimeUnit.MILLISECONDS)
-                .keepResultsForAtLeast(delayForStart-delayForEnd,TimeUnit.MILLISECONDS)
+                .keepResultsForAtLeast(delayForStart - delayForEnd, TimeUnit.MILLISECONDS)
                 .setInputData(data)
-                .addTag(formattedStartDateTime?:"")
+                .addTag(formattedStartDateTime ?: "")
                 .build()
 
 
             workManager.enqueue(workRequest)
-forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,land?:"",statusOfSound))
+            forcastViewModel.addToAlert(
+                Alert(
+                    formattedStartDateTime,
+                    formattedendDateTime,
+                    land ?: "",
+                    statusOfSound
+                )
+            )
             if (::dialog.isInitialized) {
                 dialog.dismiss()
 
@@ -286,6 +318,7 @@ forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,la
         }
         isMenuOpen = !isMenuOpen
     }
+
     private fun showMenu() {
         val inflater = LayoutInflater.from(requireContext())
         menuLayout = inflater.inflate(R.layout.menu_layout, null) as LinearLayout
@@ -298,15 +331,16 @@ forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,la
         layoutParams.anchorGravity = Gravity.TOP or Gravity.END
         layoutParams.anchorId = R.id.fabMain
         menuLayout.layoutParams = layoutParams
-        menuLayout.findViewById<View>(R.id.fbtime).setOnClickListener { dialog.show()
-    print("AAAAAAAAAa")
-    }
+        menuLayout.findViewById<View>(R.id.fbtime).setOnClickListener {
+            dialog.show()
+            print("AAAAAAAAAa")
+        }
         menuLayout.findViewById<View>(R.id.fbaddlocation).setOnClickListener {
 
             val intent = Intent(requireContext(), MapssActivity::class.java)
             startActivityForResult(intent, 1)
         }
-        val coordinatorLayout: CoordinatorLayout =binding.coordinatorLayout
+        val coordinatorLayout: CoordinatorLayout = binding.coordinatorLayout
         coordinatorLayout.addView(menuLayout)
     }
 
@@ -317,6 +351,7 @@ forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,la
             coordinatorLayout.removeView(menuLayout)
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -326,14 +361,10 @@ forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,la
             val land = data?.getStringExtra("land")
 
             this.longitude = longitude
-            this.latitude =latitude
-            this.land =land
+            this.latitude = latitude
+            this.land = land
             println("long $longitude")
             println("loc $latitude")
-
-
-
-
 
 
         }

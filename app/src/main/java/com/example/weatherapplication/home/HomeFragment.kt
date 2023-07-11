@@ -41,6 +41,7 @@ import com.example.weatherforecastapp.ui.home.model.Hourly
 import com.google.android.gms.location.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -51,15 +52,14 @@ class HomeFragment : Fragment() {
     var timeZoneS: String? = ""
     var language: String = ""
     var unit: String = ""
-    var gps:Boolean =true
+    var gps: Boolean = true
     lateinit var fusedClient: FusedLocationProviderClient
 
     private lateinit var hours: List<Hourly>
     private lateinit var day: List<Daily>
 
 
-
-    private lateinit var recyclerAdapter:RecyclerAdapter
+    private lateinit var recyclerAdapter: RecyclerAdapter
     private lateinit var dayAdatper: DayAdatper
 
     private lateinit var myLayoutManager: LinearLayoutManager
@@ -75,8 +75,8 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if(gps){
-        getLastLocation()
+        if (gps) {
+            getLastLocation()
 
         }
 
@@ -110,20 +110,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        dayLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.VERTICAL,false)
+        dayLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-        myLayoutManager = LinearLayoutManager(view.context,LinearLayoutManager.HORIZONTAL,false)
-        recyclerAdapter =RecyclerAdapter(view.context)
-                dayAdatper = DayAdatper(view.context){
+        myLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.HORIZONTAL, false)
+        recyclerAdapter = RecyclerAdapter(view.context)
+        dayAdatper = DayAdatper(view.context) {
 
-                }
+        }
 
 
 
-                binding.rchour.apply { adapter= recyclerAdapter
-            layoutManager = myLayoutManager }
-        binding.rcday.apply { adapter= dayAdatper
+        binding.rchour.apply {
+            adapter = recyclerAdapter
+            layoutManager = myLayoutManager
+        }
+        binding.rcday.apply {
+            adapter = dayAdatper
             layoutManager = dayLayoutManager
 
         }
@@ -151,7 +154,7 @@ class HomeFragment : Fragment() {
                     is NetworkState.Success -> {
                         hours = result.myResponse.hourly
                         day = result.myResponse.daily
-                       dayAdatper.submitList(day)
+                        dayAdatper.submitList(day)
                         recyclerAdapter.submitList(hours)
 
                         binding.timetv.visibility = View.VISIBLE
@@ -171,18 +174,43 @@ class HomeFragment : Fragment() {
 
 
                         val timeZoneTime = sdf.format(currentDate)
+                        if (language == "ar") {
+                            println("ssssssaaaaaaaaaaaaaaaaaaaaaaaaa")
+                            val arabicFormat = NumberFormat.getInstance(Locale("ar"))
+//                            binding.timetv.text = arabicFormat.format(timeZoneTime)
+                            binding.place.text = ""
+                            binding.tvWindSpeedUnit.text =
+                                englishNumberToArabicNumber(result.myResponse.current.wind_speed.toInt())
+                            binding.temparaturetxtview.text =
+                                englishNumberToArabicNumber(result.myResponse.current.temp.toInt())
+                            binding.tvCloudsUnit.text =
+                                arabicFormat.format(result.myResponse.current.clouds)
+                            binding.tvPressureUnit.text =
+                                arabicFormat.format(result.myResponse.current.pressure)
+                            binding.tvHumidityTemp.text =
+                                arabicFormat.format(result.myResponse.current.humidity)
+
+
+                        } else {
+                            binding.tvHumidityTemp.text =
+                                result.myResponse.current.humidity.toString()
+                            binding.tvWindSpeedUnit.text =
+                                result.myResponse.current.wind_speed.toString()
+                            binding.tvCloudsUnit.text =
+                                result.myResponse.current.clouds.toString() + " %"
+                            binding.tvPressureUnit.text =
+                                result.myResponse.current.pressure.toString()
+                            binding.temparaturetxtview.text =
+                                result.myResponse.current.temp.toString()
+
+                        }
 
                         binding.timetv.text = timeZoneTime
                         timeZoneS = result.myResponse.timezone
 
-                        binding.tvHumidityTemp.text = result.myResponse.current.humidity.toString()
-                        binding.tvWindSpeedUnit.text =
-                            result.myResponse.current.wind_speed.toString()
-                        binding.temparaturetxtview.text = result.myResponse.current.temp.toString()
+
                         binding.statustxview.text = result.myResponse.current.weather[0].description
-                        binding.tvCloudsUnit.text =
-                            result.myResponse.current.clouds.toString() + " %"
-                        binding.tvPressureUnit.text = result.myResponse.current.pressure.toString()
+
 
 
 
@@ -228,13 +256,13 @@ class HomeFragment : Fragment() {
             this.longitude = longitude
 
         }
-        viewModel.satusoflocation.observe(viewLifecycleOwner){
-println(it)
-            if (it=="gps"){
-                gps=true
+        viewModel.satusoflocation.observe(viewLifecycleOwner) {
+            println(it)
+            if (it == "gps") {
+                gps = true
+            } else {
+                gps = false
             }
-            else{
-                gps=false}
 
         }
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
@@ -267,22 +295,34 @@ println(it)
             println("gps ${lastLocation?.latitude}")
             println(lastLocation?.longitude)
 
-           viewModel.longitudegps.value =lastLocation?.longitude ?:0.0
-            viewModel.latitudegps.value =lastLocation?.latitude ?:0.0
+            viewModel.longitudegps.value = lastLocation?.longitude ?: 0.0
+            viewModel.latitudegps.value = lastLocation?.latitude ?: 0.0
 
 
-            if (gps){
-          longitude =lastLocation?.longitude ?:0.0
-            latitude = lastLocation?.latitude?:0.0}
-            forcastViewModel.getWeather(lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, language, unit)
+            if (gps) {
+                longitude = lastLocation?.longitude ?: 0.0
+                latitude = lastLocation?.latitude ?: 0.0
+            }
+            forcastViewModel.getWeather(
+                lastLocation?.latitude ?: 0.0,
+                lastLocation?.longitude ?: 0.0,
+                language,
+                unit
+            )
 
 
             try {
-                val x = geocoder.getFromLocation(locationResult.lastLocation?.latitude?:0.0, lastLocation?.longitude?:0.0, 5)
+                val x = geocoder.getFromLocation(
+                    locationResult.lastLocation?.latitude ?: 0.0,
+                    lastLocation?.longitude ?: 0.0,
+                    5
+                )
 
                 if (x != null && x.size > 0) {
                     binding.country.text = x[0].countryName
-                    binding.place.text = x[0].adminArea
+                    if (language == "en") {
+                        binding.place.text = x[0].adminArea
+                    }
 
                     println(x.size)
                 }
@@ -290,10 +330,8 @@ println(it)
             }
 
 
-
         }
     }
-
 
 
     private fun getLastLocation() {
@@ -336,8 +374,8 @@ println(it)
     }
 
     private fun isLocationIsEnabled(): Boolean {
-        val locationManager: LocationManager
-        = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager =
+            requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                 locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
@@ -353,7 +391,6 @@ println(it)
     }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -362,7 +399,7 @@ println(it)
             val longitude = data?.getDoubleExtra("longitude", 0.0) ?: 0.0
 
             this.longitude = longitude
-            this.latitude =latitude
+            this.latitude = latitude
             println("long $longitude")
             println("loc $latitude")
             viewModel.longitude.value = longitude
@@ -370,12 +407,32 @@ println(it)
 //            forcastViewModel.getAllProducts(latitude,longitude,"en","")
 
 
-
-
-
         }
     }
 
+    fun englishNumberToArabicNumber(number: Int): String {
+        val arabicNumber = mutableListOf<String>()
+        for (element in number.toString()) {
+            when (element) {
+                '1' -> arabicNumber.add("١")
+                '2' -> arabicNumber.add("٢")
+                '3' -> arabicNumber.add("٣")
+                '4' -> arabicNumber.add("٤")
+                '5' -> arabicNumber.add("٥")
+                '6' -> arabicNumber.add("٦")
+                '7' -> arabicNumber.add("٧")
+                '8' -> arabicNumber.add("٨")
+                '9' -> arabicNumber.add("٩")
+                else -> arabicNumber.add("٠")
+            }
+        }
+        return arabicNumber.toString()
+            .replace("[", "")
+            .replace("]", "")
+            .replace(",", "")
+            .replace(" ", "")
 
+
+    }
 
 }

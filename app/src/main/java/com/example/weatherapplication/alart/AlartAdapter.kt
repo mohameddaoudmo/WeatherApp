@@ -26,11 +26,19 @@ class AlartAdapter(private val context: Context, val delete: (Alert)->Unit) : Li
 
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        val sharedPref = context.getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
+        var language =sharedPref.getString("language", "")
         val currentItem: Alert = getItem(position)
+        if(language=="ar"){
+            binding.tvEndTime.text ="وقت نهايه هو ${currentItem.endTime.toString()}"
+            binding.tvStartTime.text ="وقت البدايه هو ${currentItem.startTime}"
+            binding.tvLandName.text = ""
+            binding.tvNotificationType.text =currentItem.type
+        }else{
         binding.tvEndTime.text ="End time is ${currentItem.endTime.toString()}"
         binding.tvStartTime.text ="Start time is ${currentItem.startTime}"
         binding.tvLandName.text = "Country ${currentItem.land}"
-        binding.tvNotificationType.text =currentItem.type
+        binding.tvNotificationType.text =currentItem.type}
 holder.binding.deleteAlart.setOnClickListener {
     delete(currentItem)
 }

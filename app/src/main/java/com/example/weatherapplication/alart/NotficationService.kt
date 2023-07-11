@@ -1,16 +1,21 @@
 package com.example.weatherapplication.alart
 
+import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.weatherapplication.R
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
+import com.example.weatherapplication.MainActivity
+
 
 class NotficationService(
     private val context: Context
@@ -40,18 +45,24 @@ class NotficationService(
     fun showNotification(text: String, statusofNotfication: Boolean,land :String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotficicationChannal()
+//            val sound = Uri.parse(
+//                "android.resource://" + ApplicationProvider.getApplicationContext<Context>()
+//                    .getPackageName() + "/" + com.example.weatherapplication.R.raw.sound
+//            )
 
 
             val notification = NotificationCompat.Builder(context, STATUS_CHANNEL_ID)
 
-                .setSmallIcon(R.drawable.baseline_add_alert_24)
+                .setSmallIcon(com.example.weatherapplication.R.drawable.baseline_add_alert_24)
                 .setContentTitle("Weather Status")
                 .setContentText("The Status of weather now is $text in $land")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            if (statusofNotfication) {
-                notification.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+            if (true) {
+
+
             } else {
-                notification.setSound(null);
+               notification.setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
             }
 
 //            notificationManager.notify(1, notification.build()
@@ -61,6 +72,11 @@ class NotficationService(
             }        }
 
 
+    }
+    private fun getFullScreenIntent(): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     companion object {
