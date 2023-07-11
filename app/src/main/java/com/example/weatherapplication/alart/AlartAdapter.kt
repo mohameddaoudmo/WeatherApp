@@ -30,6 +30,7 @@ class AlartAdapter(private val context: Context, val delete: (Alert)->Unit) : Li
         binding.tvEndTime.text ="End time is ${currentItem.endTime.toString()}"
         binding.tvStartTime.text ="Start time is ${currentItem.startTime}"
         binding.tvLandName.text = "Country ${currentItem.land}"
+        binding.tvNotificationType.text =currentItem.type
 holder.binding.deleteAlart.setOnClickListener {
     delete(currentItem)
 }

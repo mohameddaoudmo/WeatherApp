@@ -38,4 +38,6 @@
     <string name="alertoptian">Alert Setting</string>
     <string name="setalarm">Set Alarm</string>
     <string name="cancel">Cancel</string>
+    <string name="alarts">Alarts</string>
+    <string name="fav">Favourite</string>
 </resources>

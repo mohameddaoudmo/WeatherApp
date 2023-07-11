@@ -9,6 +9,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.example.weatherapplication.R
 
 class NotficationService(
@@ -23,7 +24,7 @@ class NotficationService(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val charSequence :CharSequence ="Weather Status"
             var discrption : String = "Channel for Notification for Weather Status"
-            var importance = NotificationManager.IMPORTANCE_DEFAULT
+            var importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(
                 STATUS_CHANNEL_ID ,charSequence    , importance
             )
@@ -48,13 +49,16 @@ class NotficationService(
                 .setContentText("The Status of weather now is $text in $land")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             if (statusofNotfication) {
-                notification.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                notification.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
             } else {
                 notification.setSound(null);
             }
 
-            notificationManager.notify(1, notification.build())
-        }
+//            notificationManager.notify(1, notification.build()
+                    with(NotificationManagerCompat.from(context)) {
+                // notificationId is a unique int for each notification that you must define
+                notify(1, notification.build())
+            }        }
 
 
     }

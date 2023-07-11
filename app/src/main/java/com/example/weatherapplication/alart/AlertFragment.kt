@@ -43,6 +43,7 @@ class AlertFragment : Fragment() {
     lateinit var  menuLayout: LinearLayout
     private lateinit var spinner: Spinner
     private var alarm :Boolean = false
+    private var statusOfSound :String=""
     private lateinit var myLayoutManager: LinearLayoutManager
     lateinit var recyclerAdapter: AlartAdapter
     lateinit var forcastViewModel: ForcastViewModel
@@ -114,7 +115,7 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                 val selectedItem = parent?.getItemAtPosition(position).toString()
                 if(selectedItem=="Alarm sound"){
                     alarm =true
-                }
+statusOfSound ="Alarm sound"               }
                 else{
                     alarm =false
                 }
@@ -255,7 +256,7 @@ bindingDialog.button2.setOnClickListener { dialog.dismiss() }
 
 
             workManager.enqueue(workRequest)
-forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,land?:"",""))
+forcastViewModel.addToAlert(Alert(formattedStartDateTime,formattedendDateTime,land?:"",statusOfSound))
             if (::dialog.isInitialized) {
                 dialog.dismiss()
 
