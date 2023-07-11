@@ -15,7 +15,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.Data
-import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.weatherapplication.MapssActivity
 import com.example.weatherapplication.R
@@ -24,6 +24,7 @@ import com.example.weatherapplication.databinding.FragmentAlertBinding
 import com.example.weatherapplication.databinding.FragmentDialogForAlertBinding
 import com.example.weatherapplication.databinding.MenuLayoutBinding
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -33,13 +34,15 @@ class AlertFragment : Fragment() {
     private lateinit var spinner: Spinner
     private var alarm :Boolean = false
 
+
     private var isMenuOpen = false
     private lateinit var builder: AlertDialog.Builder
     private var startD: Long = 0L
     private var endD: Long = 0L
     private var startT: Long = 0L
     private var endT: Long = 0L
-    var delay: Long = 0L
+    var delayForStart: Long = 0L
+    var delayForEnd :Long =0L
     lateinit var viewModel: SharedViewModel
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
@@ -107,7 +110,7 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             println(startT)
                             val currentTime = System.currentTimeMillis()
                             val notificationStartTime = calendar.timeInMillis
-                            delay = notificationStartTime - currentTime
+                            delayForStart = notificationStartTime - currentTime
                             println("currrrent $currentTime")
                             println("nofffffffffffff $notificationStartTime")
 
@@ -147,9 +150,10 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
                             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
                             calendar.set(Calendar.MINUTE, minute)
-                            val notificationendTime = calendar.timeInMillis
+                            val currentTime = System.currentTimeMillis()
 
-                            endT = notificationendTime
+                            val notificationendTime = calendar.timeInMillis
+                            delayForEnd = notificationendTime - currentTime
                             println(endT)
 
                             val formattedDateTime =
@@ -200,10 +204,13 @@ layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
 
                 .build()
             val myContext = requireContext()
-            val workRequest: OneTimeWorkRequest = OneTimeWorkRequest.Builder(MyWorker::class.java)
-                .setInitialDelay(delay, TimeUnit.MILLISECONDS)
+            val workRequest = PeriodicWorkRequestBuilder<MyWorker>(1, TimeUnit.HOURS)
+                .setInitialDelay(delayForStart, TimeUnit.MILLISECONDS)
+                .keepResultsForAtLeast(delayForStart-delayForEnd,TimeUnit.MILLISECONDS)
                 .setInputData(data)
+                .addTag(land?:"")
                 .build()
+
 
             WorkManager.getInstance(myContext).enqueue(workRequest)
 
