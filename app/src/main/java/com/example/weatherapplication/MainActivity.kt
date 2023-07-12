@@ -1,9 +1,14 @@
 package com.example.weatherapplication
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -35,6 +40,8 @@ class MainActivity : AppCompatActivity() {
 //        actionBar?.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)
 //        actionBar!!.setDisplayShowHomeEnabled(true)
 //        actionBar.setDisplayHomeAsUpEnabled(true)
+
+
 
         val navController = findNavController(this, R.id.nav_host_fragment)
 //        setupWithNavController(navigationView, navController)
@@ -68,4 +75,5 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
     }
+
 }

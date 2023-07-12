@@ -1,6 +1,7 @@
 package com.example.designpattern.model
 
 import com.example.designpattern.db.ConLocalSource
+import com.example.designpattern.db.LocalSource
 import com.example.designpattern.network.RemoteSource
 import com.example.weatherapplication.model.Alert
 import com.example.weatherapplication.model.Favorite
@@ -12,7 +13,7 @@ import retrofit2.Response
 
 class Repostiory(
     private val remoteSource: RemoteSource,
-    private val concreteLocalSource: ConLocalSource
+    private val concreteLocalSource: LocalSource
 ) : RepositioryInterface {
     var latitude :Double = 0.0
     var longitude :Double = 0.0
@@ -24,6 +25,7 @@ class Repostiory(
                                           lon: Double,
                                           lang: String,
                                           unit: String,):  Flow<Response<Forecast>>{
+
         return remoteSource.getProductsFromNetwork(lat,lon ,lang,unit)
     }
 
