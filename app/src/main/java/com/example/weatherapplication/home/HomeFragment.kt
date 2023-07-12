@@ -3,6 +3,7 @@ package com.example.weatherapplication.home
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -38,14 +39,14 @@ import com.example.designpattern.db.ConLocalSource
 import com.example.designpattern.model.Repostiory
 import com.example.designpattern.network.ApiClient
 import com.example.designpattern.network.NetworkState
-import com.example.weatherapplication.My_LOCATION_PERMISSION_ID
+import com.example.weatherapplication.*
 import com.example.weatherapplication.R
-import com.example.weatherapplication.SharedViewModel
 import com.example.weatherapplication.alart.MyWorker
 import com.example.weatherapplication.databinding.FragmentHomeBinding
 import com.example.weatherforecastapp.ui.home.model.Daily
 import com.example.weatherforecastapp.ui.home.model.Hourly
 import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
@@ -53,6 +54,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment() {
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var isconnected :Boolean=true
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     lateinit var timeZone: TimeZone
@@ -114,9 +117,25 @@ class HomeFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        connectivityObserver = ConnectivtyManger(requireContext())
+        lifecycleScope.launch {
+            connectivityObserver.observe().collect { status ->
+                // update the text view with the new status
+                println( "Connectivity status: $status")
+                if(status== ConnectivityObserver.Status.Available){
+                    isconnected=true
 
+                }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
+
+                    Snackbar.make(view, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.maincolor))
+                        .show()
+                }
+            }
+        }
         dayLayoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
         fusedClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
@@ -195,6 +214,7 @@ class HomeFragment : Fragment() {
                                 arabicFormat.format(result.myResponse.current.pressure)
                             binding.tvHumidityTemp.text =
                                 arabicFormat.format(result.myResponse.current.humidity)
+                            binding.place.text =""
 
 
                         } else {
@@ -273,6 +293,7 @@ class HomeFragment : Fragment() {
         }
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
             this.latitude = latitude
+
             forcastViewModel.getWeather(latitude, longitude, language, unit)
 
 
@@ -308,13 +329,14 @@ class HomeFragment : Fragment() {
             if (gps) {
                 longitude = lastLocation?.longitude ?: 0.0
                 latitude = lastLocation?.latitude ?: 0.0
+
+                forcastViewModel.getWeather(
+                    lastLocation?.latitude ?: 0.0,
+                    lastLocation?.longitude ?: 0.0,
+                    language,
+                    unit
+                )
             }
-            forcastViewModel.getWeather(
-                lastLocation?.latitude ?: 0.0,
-                lastLocation?.longitude ?: 0.0,
-                language,
-                unit
-            )
 
 
             try {
@@ -326,9 +348,9 @@ class HomeFragment : Fragment() {
 
                 if (x != null && x.size > 0) {
                     binding.country.text = x[0].countryName
-                    if (language == "en") {
+
                         binding.place.text = x[0].adminArea
-                    }
+
 
                     println(x.size)
                 }
@@ -440,5 +462,10 @@ class HomeFragment : Fragment() {
             .replace(" ", "")
 
 
+    }
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 }

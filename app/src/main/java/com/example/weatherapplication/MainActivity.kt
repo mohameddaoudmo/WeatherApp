@@ -10,21 +10,37 @@ import android.view.View
 import android.view.WindowManager
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.weatherapplication.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     lateinit var binding : ActivityMainBinding
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var isconnected :Boolean=true
 
-
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        connectivityObserver = ConnectivtyManger(this)
+        lifecycleScope.launch {
+            connectivityObserver.observe().collect { status ->
+                println( "Connectivity status: $status")
+                if(status== ConnectivityObserver.Status.Available){
+                    isconnected=true
+                    println("is connected")
+                }else{isconnected=false}
+            }
+        }
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot())
         window.setFlags(
@@ -42,13 +58,17 @@ class MainActivity : AppCompatActivity() {
 //        actionBar.setDisplayHomeAsUpEnabled(true)
 
 
-
         val navController = findNavController(this, R.id.nav_host_fragment)
 //        setupWithNavController(navigationView, navController)
         setupWithNavController(binding.bottomNavigation, navController)
 
+        if (!isconnected) {
+            Snackbar.make(binding.root, "No internet connection", Snackbar.LENGTH_LONG).apply {
+                view.setBackgroundColor(ContextCompat.getColor(context, R.color.maincolor))
+                show()
+            }
 
-    }
+    }}
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        if (item.itemId == android.R.id.home) {
 //            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

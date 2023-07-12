@@ -1,11 +1,15 @@
 package com.example.designpattern.allproduct.viewModel
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.lifecycle.ViewModel
 import com.example.designpattern.model.Product
 import kotlinx.coroutines.Dispatchers
 import androidx.lifecycle.viewModelScope
 import com.example.designpattern.model.RepositioryInterface
 import com.example.designpattern.network.NetworkState
+import com.example.weatherapplication.ConnectivityObserver
+import com.example.weatherapplication.ConnectivtyManger
 import com.example.weatherapplication.model.Alert
 import com.example.weatherapplication.model.Favorite
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +19,8 @@ import kotlinx.coroutines.launch
 
 
 class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewModel() {
+
+var flagconnect:Boolean=true
     private val _productsMutableStateFlow: MutableStateFlow<NetworkState> =
         MutableStateFlow(NetworkState.Loading)
     val productsStateFlow: StateFlow<NetworkState>
@@ -31,12 +37,12 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
 
     }
 
-
      fun getWeather(lat: Double,
                     lon: Double,
                     lang: String,
-                    unit: String,) {
+                    unit: String) {
         println("$lat $lang in view model")
+
         viewModelScope.launch {
             repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
                 NetworkState.Failure(it.message!!)
@@ -51,8 +57,8 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
                 }
 
             }
-        }
-    }
+        }}
+
 
     fun addToFavorites(favorite: Favorite){
         viewModelScope.launch (Dispatchers.IO){
@@ -95,4 +101,13 @@ fun addToAlert(alert:  Alert){
         viewModelScope.launch {
             repoInterface.removeFromAlart(alert)
         }
-}}
+
+
+}
+    fun isNetworkConnected(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
+}

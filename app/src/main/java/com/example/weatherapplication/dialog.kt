@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
@@ -16,17 +17,24 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.weatherapplication.databinding.ActivityDialogBinding
 import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 const val My_LOCATION_PERMISSION_ID =44
 
 class dialog : AppCompatActivity() {
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var isconnected :Boolean=true
+
     lateinit var map :RadioButton
     private var longitude: Double? = 0.0
     private var latitude: Double ?= 0.0
@@ -40,8 +48,28 @@ class dialog : AppCompatActivity() {
         super.onResume()
 
     }
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        connectivityObserver = ConnectivtyManger(this)
+        lifecycleScope.launch {
+            connectivityObserver.observe().collect { status ->
+                // update the text view with the new status
+                println( "Connectivity status: $status")
+                if(status== ConnectivityObserver.Status.Available){
+                    isconnected=true
+                    println("is connected")
+                }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
+
+                    Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.maincolor))
+                        .show()
+                }
+                else{ Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.maincolor))
+                    .show()}
+            }
+        }
         binding = ActivityDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.setFlags(
