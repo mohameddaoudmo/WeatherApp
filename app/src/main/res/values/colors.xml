@@ -9,6 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="maincolor">#265B83</color>
     <color name="background_color_dark">#000000</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="semitranspaent">#80000000</color>
+
+
+
 
 
 </resources>

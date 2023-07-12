@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather Application</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="weather">طقس</string>
+    <string name="temprature">درجه حراره</string>
+    <string name="lanugaue">اللغه</string>
+    <string name="english">انجليزي</string>
+    <string name="arabic">عربي</string>
+    <string name="kelvin">كليفين</string>
+    <string name="celsius">درجة مئوية</string>
+    <string name="Fahrenheit">فهرنهيت</string>
+    <string name="locationdefine">المكان</string>
+    <string name="windmesuarment">الرياح</string>
+    <string name="metersec">متر/ثانيه</string>
+    <string name="mileshour">ميل/ساعه</string>
+    <string name="gps">نظام الملاحه</string>
+    <string name="map">خريطه</string>
+    <string name="titleactivityaps">خريطه</string>
+    <string name="title_activity_mapss">MapssActivity</string>
+    <string name="wind">الرياح</string>
+    <string name="humdity">الرطوبه</string>
+    <string name="perssure">الضغط</string>
+    <string name="cloud">السحاب</string>
+    <string name="unit">وحده</string>
+    <string name="unitforwind">وحده قياس الرياح</string>
+    <string name="unittemp"> وحده قياس الحراره </string>
+    <string name="selectlocationway">اختر طريقه تحديد المكان:</string>
+    <string name="setting">اعدادت</string>
+    <string name="location">المكان</string>
+    <string name="ok">موافق</string>
+    <string name="delete">مسح</string>
+    <string-array name="sound_options">
+        <item>اشعارات</item>
+        <item>تبيه</item>
+    </string-array>
+    <string name="sound_prompt">اختر طريقه التنبه</string>
+    <string name="alertoptian">اعدادت المنبه</string>
+    <string name="setalarm">اظبط التنبه</string>
+    <string name="cancel">الغاء</string>
+    <string name="alarts">تنبهات</string>
+    <string name="fav">المفضله</string>
+    <string name="home">الرئيسيه</string>
+
+</resources>

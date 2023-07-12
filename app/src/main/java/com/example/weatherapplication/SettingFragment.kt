@@ -1,7 +1,10 @@
 package com.example.weatherapplication
 
 import android.app.Activity
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -24,6 +27,7 @@ import java.util.*
 
 
 class SettingFragment : Fragment() {
+
     var longitude: Double? = 1.0
     var latitude : Double? =1.0
     lateinit var viewModel :SharedViewModel
@@ -43,7 +47,10 @@ class SettingFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
+        val sharedPref = requireActivity().getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
         forcastViewModelFactory =
             AllproductviewFactory(Repostiory(ApiClient, ConLocalSource(requireContext())))
         forcastViewModel = ViewModelProvider(
@@ -57,7 +64,9 @@ class SettingFragment : Fragment() {
 
         binding.mapRadioButton
             .setOnClickListener{
-            val intent = Intent(requireContext(), MapssActivity::class.java)
+                viewModel.satusoflocation.value="map"
+
+                val intent = Intent(requireContext(), MapssActivity::class.java)
             startActivityForResult(intent, 1)
 
         }
@@ -67,11 +76,18 @@ class SettingFragment : Fragment() {
         binding.arabicRadioButton.setOnClickListener {
          setLocale("ar")
             viewModel.language.value ="ar"
+
+            editor.putString("language", "ar")
+            editor.apply()
         }
         binding.englishRadioButton
             .setOnClickListener { setLocale("en")
+                editor.putString("language", "en")
+                editor.apply()
                 viewModel.language.value ="en"}
-        binding.gpsRadioButton.setOnClickListener { }
+        binding.gpsRadioButton.setOnClickListener {viewModel.satusoflocation.value="gps" }
+
+
     }
 
     override fun onCreateView(

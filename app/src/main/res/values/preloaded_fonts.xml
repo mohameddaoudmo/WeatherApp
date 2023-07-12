@@ -3,8 +3,10 @@
     <array name="preloaded_fonts" translatable="false">
         <item>@font/aldrich</item>
         <item>@font/andika_new_basic</item>
+        <item>@font/averia_serif_libre_light</item>
         <item>@font/bevan</item>
         <item>@font/holtwood_one_sc</item>
+        <item>@font/roboto</item>
         <item>@font/viga</item>
     </array>
 

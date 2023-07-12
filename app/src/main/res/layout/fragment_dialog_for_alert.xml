@@ -1,0 +1,149 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="17dp"
+
+    app:cardElevation="17dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="420dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="306dp"
+            android:layout_height="43dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/roboto"
+            android:gravity="center"
+            android:text="@string/alertoptian"
+            android:textColor="#000000"
+            android:textSize="24sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/start_time_textvie"
+                android:layout_width="214dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:text="Start Time: Not Set"
+
+
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/startimageview"
+                android:layout_width="50dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="60dp"
+                android:layout_marginLeft="10dp"
+
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_baseline_calendar_month_24" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/end_time_textvie"
+                android:layout_width="214dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:text="End Time: Not Set"
+
+                android:textSize="20sp" />
+
+
+            <ImageView
+                android:id="@+id/endtimecalender"
+                android:layout_width="50dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="60dp"
+
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                app:srcCompat="@drawable/ic_baseline_calendar_month_24" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="236dp"
+                android:layout_height="wrap_content"
+                android:text="@string/selectlocation"
+                android:textColor="#0B0B0B"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/locationwaydefine"
+                android:layout_width="50dp"
+                android:layout_height="41dp"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:foregroundGravity="right"
+                app:srcCompat="@drawable/ic_baseline_add_location_24" />
+
+        </LinearLayout>
+        <Spinner
+            android:id="@+id/sound_spinne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:entries="@array/sound_options"
+            android:prompt="@string/sound_prompt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/end_time_textvie" />
+
+
+
+        <Button
+            android:id="@+id/set_alarm_butto"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+
+            android:background="@drawable/bottombar"
+            android:text="@string/setalarm"
+            android:textColor="#F1F1F1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sound_spinne" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="220dp"
+            android:layout_marginBottom="10dp"
+
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#F1F1F1"
+            android:background="@drawable/bottombar"
+            android:text="@string/cancel" />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

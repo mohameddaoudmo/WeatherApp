@@ -16,4 +16,6 @@ interface Apiservice {
         @Query("exclude") exclude: String = "minutely",
         @Query("appid") appid: String = "52a9dabee5c82702cb8c32eb70429b55"
     ): retrofit2.Response<Forecast>
+
+
 }

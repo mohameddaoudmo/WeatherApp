@@ -25,4 +25,23 @@
     <string name="unit">Unit</string>
     <string name="unitforwind">Wind Unit</string>
     <string name="unittemp"> Temp Unit </string>
+    <string name="selectlocationway">Select Location way:</string>
+    <string name="setting">Setting</string>
+    <string name="location">Location</string>
+    <string name="ok">ok</string>
+    <string name="delete">Delete</string>
+    <string-array name="sound_options">
+        <item>Notification sound</item>
+        <item>Alarm sound</item>
+    </string-array>
+    <string name="sound_prompt">Select a sound option</string>
+    <string name="alertoptian">Alert Setting</string>
+    <string name="setalarm">Set Alarm</string>
+    <string name="cancel">Cancel</string>
+    <string name="alarts">Alarts</string>
+    <string name="fav">Favourite</string>
+    <string name="home">Home</string>
+    <string name="selectlocation">SelectLocation</string>
+    <string name="connectionmessage">There is no connection can\'t last Forcast</string>
+
 </resources>

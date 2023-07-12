@@ -41,19 +41,24 @@ android {
     }
 }
 
+def work_version = "2.8.1"
 
 dependencies {
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
     implementation 'com.airbnb.android:lottie:4.1.0'
 
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+    implementation 'com.google.android.libraries.places:places:3.1.0'
+    implementation 'androidx.test:core-ktx:1.4.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.firebase:protolite-well-known-types:18.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -72,8 +77,10 @@ dependencies {
 
 
 
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
 
-
+    testImplementation 'app.cash.turbine:turbine:1.0.0'
 
     implementation "androidx.room:room-ktx:2.5.0"
     implementation "androidx.room:room-runtime:2.5.0"

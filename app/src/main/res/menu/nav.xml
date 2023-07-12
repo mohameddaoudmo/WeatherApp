@@ -7,20 +7,20 @@
 
         <item
             android:id="@+id/homeFragment2"
-            android:title="Home"
-            android:icon="@drawable/baseline_home_24"/>
+            android:icon="@drawable/baseline_home_24"
+            android:title="@string/home" />
         <item
             android:id="@+id/settingFragment"
-            android:title="Setting"
-            android:icon="@drawable/baseline_settings_24"/>
+            android:icon="@drawable/baseline_settings_24"
+            android:title="@string/setting" />
         <item
             android:id="@+id/alertFragment"
-            android:title="Alert"
-            android:icon="@drawable/baseline_add_alert_24"/>
+            android:icon="@drawable/baseline_add_alert_24"
+            android:title="@string/alarts" />
         <item
-            android:id="@+id/favourite"
-            android:title="Favourite"
-            android:icon="@drawable/baseline_favorite_24"/>
+            android:id="@+id/favFragment"
+            android:icon="@drawable/baseline_favorite_24"
+            android:title="@string/fav" />
 
 
     </group>

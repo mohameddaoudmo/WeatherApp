@@ -11,6 +11,7 @@
     tools:context=".home.HomeFragment" >
 
     <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -60,14 +61,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/viga"
-                                android:textColor="@color/black"
+                                android:textColor="@color/white"
                                 android:textSize="24sp" />
 
                             <TextView
                                 android:id="@+id/place"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textColor="#000000"
+                                android:textColor="@color/white"
                                 android:textSize="20sp" />
                         </LinearLayout>
 
@@ -93,7 +94,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="25"
-                            android:textColor="#000000"
+                            android:textColor="@color/white"
                             android:textSize="28sp" />
 
                         <LinearLayout
@@ -106,7 +107,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="6dp"
                                 android:text="o"
-                                android:textColor="#000000"
+                                android:textColor="@color/white"
                                 android:textSize="13sp" />
 
                         </LinearLayout>
@@ -115,7 +116,7 @@
                             android:id="@+id/statustxview"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="#000000"
+                            android:textColor="@color/white"
                             android:textSize="20sp" />
 
                         <RelativeLayout
@@ -129,7 +130,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginStart="6dp"
                                 android:layout_marginEnd="0dp"
-                                android:textColor="#000000"
+                                android:textColor="@color/white"
                                 android:textSize="24sp" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -157,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="21sp"
                         app:layout_constraintEnd_toEndOf="@id/tv_humidity"
                         app:layout_constraintStart_toStartOf="@id/tv_humidity"
@@ -170,7 +171,7 @@
                         android:fontFamily="@font/viga"
                         android:gravity="center"
                         android:text="@string/humdity"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="@id/iv_humidity_icon"
                         app:layout_constraintStart_toStartOf="@id/iv_humidity_icon"
@@ -184,7 +185,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/humditys" />
+                        app:srcCompat="@drawable/humidityicon" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -211,7 +212,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="21sp"
                         app:layout_constraintEnd_toEndOf="@id/tv_wind_speed"
                         app:layout_constraintStart_toStartOf="@id/tv_wind_speed"
@@ -224,7 +225,7 @@
                         android:fontFamily="@font/viga"
                         android:gravity="center"
                         android:text="@string/wind"
-                        android:textColor="#181819"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="@id/iv_wind_speed"
                         app:layout_constraintStart_toStartOf="@id/iv_wind_speed"
@@ -238,7 +239,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/winds" />
+                        app:srcCompat="@drawable/windicon2" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -264,7 +265,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="@id/tv_pressure"
                         app:layout_constraintStart_toStartOf="@id/tv_pressure"
@@ -277,7 +278,7 @@
                         android:fontFamily="@font/viga"
                         android:gravity="center"
                         android:text="@string/perssure"
-                        android:textColor="#040404"
+                        android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintEnd_toEndOf="@id/iv_pressure"
                         app:layout_constraintStart_toStartOf="@id/iv_pressure"
@@ -291,7 +292,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/pressure_svgrepo_com" />
+                        app:srcCompat="@drawable/preesureicon" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -318,7 +319,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="21sp"
                         app:layout_constraintEnd_toEndOf="@id/tv_clouds"
                         app:layout_constraintStart_toStartOf="@id/tv_clouds"
@@ -330,7 +331,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/viga"
                         android:text="@string/cloud"
-                        android:textColor="#000000"
+                        android:textColor="@color/white"
                         android:textSize="21sp"
                         app:layout_constraintEnd_toEndOf="@id/iv_humi"
 
@@ -345,7 +346,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/cloudy_svgrepo_com" />
+                        app:srcCompat="@drawable/cloudicon" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -355,7 +356,8 @@
                 style="@android:style/Widget.DeviceDefault.Light.TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#151515"
+                android:layout_marginTop="30dp"
+                android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/cardView"
@@ -388,7 +390,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rchour"
                 tools:layoutManager="GridLayoutManager" />
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
