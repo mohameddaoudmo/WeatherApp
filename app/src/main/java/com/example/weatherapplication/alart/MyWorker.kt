@@ -50,7 +50,7 @@ class MyWorker(context: Context, workerParams: WorkerParameters) :  CoroutineWor
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post {
 
-        if (true) {
+        if (sound) {
             val player =
                 MediaPlayer.create(applicationContext, R.raw.sound)
             player.start()

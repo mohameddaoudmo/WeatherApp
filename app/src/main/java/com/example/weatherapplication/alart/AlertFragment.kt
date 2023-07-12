@@ -102,9 +102,8 @@ class AlertFragment : Fragment() {
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
         layoutmenubinding.fbtime.setOnClickListener { dialog.show() }
-        binding.fabMain.setOnClickListener {
-            toggle()
-
+        binding.floatingActionButton.setOnClickListener {
+dialog.show()
 
         }
         spinner = bindingDialog.soundSpinne
@@ -191,6 +190,9 @@ class AlertFragment : Fragment() {
             datePickerDialog.show()
 
         }
+        bindingDialog.locationwaydefine.setOnClickListener {
+            val intent = Intent(requireContext(), MapssActivity::class.java)
+            startActivityForResult(intent, 1) }
 
         bindingDialog.endtimecalender.setOnClickListener {
             val calendar = Calendar.getInstance()
@@ -310,47 +312,45 @@ class AlertFragment : Fragment() {
         return binding.root
     }
 
-    private fun toggle() {
-        if (isMenuOpen) {
-            removeMenu()
-        } else {
-            showMenu()
-        }
-        isMenuOpen = !isMenuOpen
-    }
+//    private fun toggle() {
+//        if (isMenuOpen) {
+//            removeMenu()
+//        } else {
+//            showMenu()
+//        }
+//        isMenuOpen = !isMenuOpen
+//    }
 
-    private fun showMenu() {
-        val inflater = LayoutInflater.from(requireContext())
-        menuLayout = inflater.inflate(R.layout.menu_layout, null) as LinearLayout
-        val layoutParams = CoordinatorLayout.LayoutParams(
-            CoordinatorLayout.LayoutParams.WRAP_CONTENT,
-            CoordinatorLayout.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.gravity = Gravity.TOP or Gravity.END
-        layoutParams.setMargins(16, 16, 16, 16)
-        layoutParams.anchorGravity = Gravity.TOP or Gravity.END
-        layoutParams.anchorId = R.id.fabMain
-        menuLayout.layoutParams = layoutParams
-        menuLayout.findViewById<View>(R.id.fbtime).setOnClickListener {
-            dialog.show()
-            print("AAAAAAAAAa")
-        }
-        menuLayout.findViewById<View>(R.id.fbaddlocation).setOnClickListener {
+//    private fun showMenu() {
+//        val inflater = LayoutInflater.from(requireContext())
+//        menuLayout = inflater.inflate(R.layout.menu_layout, null) as LinearLayout
+//        val layoutParams = CoordinatorLayout.LayoutParams(
+//            CoordinatorLayout.LayoutParams.WRAP_CONTENT,
+//            CoordinatorLayout.LayoutParams.WRAP_CONTENT
+//        )
+//        layoutParams.gravity = Gravity.TOP or Gravity.END
+//        layoutParams.setMargins(16, 16, 16, 16)
+//        layoutParams.anchorGravity = Gravity.TOP or Gravity.END
+//        layoutParams.anchorId = R.id.fabMain
+//        menuLayout.layoutParams = layoutParams
+//        menuLayout.findViewById<View>(R.id.fbtime).setOnClickListener {
+//            dialog.show()
+//            print("AAAAAAAAAa")
+//        }
+//        menuLayout.findViewById<View>(R.id.fbaddlocation).setOnClickListener {
+//
+//        }
+//        val coordinatorLayout: CoordinatorLayout = binding.coordinatorLayout
+//        coordinatorLayout.addView(menuLayout)
+//    }
 
-            val intent = Intent(requireContext(), MapssActivity::class.java)
-            startActivityForResult(intent, 1)
-        }
-        val coordinatorLayout: CoordinatorLayout = binding.coordinatorLayout
-        coordinatorLayout.addView(menuLayout)
-    }
-
-    private fun removeMenu() {
-        if (menuLayout != null && menuLayout.parent != null) {
-            val coordinatorLayout: CoordinatorLayout =
-                binding.coordinatorLayout
-            coordinatorLayout.removeView(menuLayout)
-        }
-    }
+//    private fun removeMenu() {
+//        if (menuLayout != null && menuLayout.parent != null) {
+//            val coordinatorLayout: CoordinatorLayout =
+//                binding.coordinatorLayout
+//            coordinatorLayout.removeView(menuLayout)
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

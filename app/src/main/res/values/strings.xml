@@ -41,5 +41,6 @@
     <string name="alarts">Alarts</string>
     <string name="fav">Favourite</string>
     <string name="home">Home</string>
+    <string name="selectlocation">SelectLocation</string>
 
 </resources>
