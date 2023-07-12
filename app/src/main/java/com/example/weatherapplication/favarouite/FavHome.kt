@@ -106,7 +106,7 @@ class FavHome : AppCompatActivity() {
         animationDrawable.setEnterFadeDuration(2500)
         animationDrawable.setExitFadeDuration(5000)
         animationDrawable.start()
-        forcastViewModel.getWeather(latitude, longitude, language, unit)
+        forcastViewModel.getWeather(latitude, longitude, language, unit,true)
 
         lifecycleScope.launch {
 

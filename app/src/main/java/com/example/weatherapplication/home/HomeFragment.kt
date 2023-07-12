@@ -55,7 +55,7 @@ import java.util.*
 
 class HomeFragment : Fragment() {
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var isconnected :Boolean=true
+    private var isconnected :Boolean=false
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     lateinit var timeZone: TimeZone
@@ -83,13 +83,35 @@ class HomeFragment : Fragment() {
     lateinit var forcastViewModelFactory: AllproductviewFactory
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
         if (gps) {
             getLastLocation()
 
         }
+        connectivityObserver = ConnectivtyManger(requireContext())
+        lifecycleScope.launch {
+            connectivityObserver.observe().collect { status ->
+                println("Connectivity status: $status")
+                if (status == ConnectivityObserver.Status.Available) {
+                    isconnected = true
+                } else if (status == ConnectivityObserver.Status.Lost) {
+                    isconnected = false
 
+                    Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.maincolor
+                            )
+                        )
+                        .show()
+                } else {
+                    isconnected = false
+                }
+            }
+        }
 
     }
 
@@ -127,12 +149,41 @@ class HomeFragment : Fragment() {
                 println( "Connectivity status: $status")
                 if(status== ConnectivityObserver.Status.Available){
                     isconnected=true
+                    if(gps==false){
+                    viewModel.latitude.observe(viewLifecycleOwner) { latitudes ->
+                        latitude = latitudes
+                        forcastViewModel.getWeather(
+                            latitude,
+                            longitude,
+                            language,
+                            unit,
+                            isconnected
+                        )
+
+                        if (isconnected) {
+                            try {
+                                val x = geocoder.getFromLocation(latitude, longitude, 5)
+
+                                if (x != null && x.size > 0) {
+                                    binding.country.text = x[0].countryName
+                                    binding.place.text = x[0].adminArea
+
+                                    println(x.size)
+                                }
+                            } catch (e: Exception) {
+                            }
+                        }
+
+                    }}
+
 
                 }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
 
                     Snackbar.make(view, "This is a custom snack bar", Snackbar.LENGTH_LONG)
                         .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.maincolor))
                         .show()
+                }else {
+                    isconnected = false
                 }
             }
         }
@@ -237,7 +288,7 @@ class HomeFragment : Fragment() {
 
 
 
-
+println(result.myResponse.current.weather[0].icon)
 
                         when (result.myResponse.current.weather[0].icon) {
                             "01d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
@@ -250,6 +301,7 @@ class HomeFragment : Fragment() {
                             "01n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_clear_day)
                             "03n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
                             "04d" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
+                            "04n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.ic_mostly_cloudy)
 
                             "09n" -> binding.imageforweather.setImageResource(com.example.weatherapplication.R.drawable.rainy)
 
@@ -271,7 +323,7 @@ class HomeFragment : Fragment() {
         viewModel.language.observe(viewLifecycleOwner) {
             language = it
 
-            forcastViewModel.getWeather(latitude, longitude, language, unit)}
+            forcastViewModel.getWeather(latitude, longitude, language, unit,isconnected)}
 
 
         viewModel.unitfortemp.observe(viewLifecycleOwner) {
@@ -295,8 +347,8 @@ class HomeFragment : Fragment() {
         viewModel.latitude.observe(viewLifecycleOwner) { latitude ->
             this.latitude = latitude
 
-            forcastViewModel.getWeather(latitude, longitude, language, unit)
-
+            forcastViewModel.getWeather(latitude, longitude, language, unit,isconnected)
+            if (isconnected) {
 
             try {
                 val x = geocoder.getFromLocation(latitude, this.longitude, 5)
@@ -311,7 +363,7 @@ class HomeFragment : Fragment() {
             }
 
 
-        }
+        }}
 
 
     }
@@ -336,11 +388,11 @@ class HomeFragment : Fragment() {
                     lastLocation?.latitude ?: 0.0,
                     lastLocation?.longitude ?: 0.0,
                     language,
-                    unit
+                    unit,isconnected
                 )
             }
 
-
+            if (isconnected) {
             try {
                 val x = geocoder.getFromLocation(
                     locationResult.lastLocation?.latitude ?: 0.0,
@@ -361,7 +413,7 @@ class HomeFragment : Fragment() {
 
 
         }
-
+        }
     }
 
 

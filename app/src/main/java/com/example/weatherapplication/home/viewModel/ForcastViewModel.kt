@@ -36,27 +36,27 @@ class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewMo
 
     }
 
-     fun getWeather(lat: Double,
-                    lon: Double,
-                    lang: String,
-                    unit: String) {
+    fun getWeather(lat: Double,
+                   lon: Double,
+                   lang: String,
+                   unit: String,connect:Boolean) {
         println("$lat $lang in view model")
+        if(connect){
+            viewModelScope.launch {
+                repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
+                    NetworkState.Failure(it.message!!)
+                }.collect {
 
-        viewModelScope.launch {
-            repoInterface.getFromNetwork(lat,lon,lang,unit).catch {
-                NetworkState.Failure(it.message!!)
-            }.collect {
+                    if (it.isSuccessful) {
 
-                if (it.isSuccessful) {
+                        _productsMutableStateFlow.value = NetworkState.Success(it.body()!!)
+                    } else {
+                        val errorBody = it.errorBody()?.string()
+                        _productsMutableStateFlow.value = NetworkState.Failure(errorBody!!)
+                    }
 
-                    _productsMutableStateFlow.value = NetworkState.Success(it.body()!!)
-                } else {
-                    val errorBody = it.errorBody()?.string()
-                    _productsMutableStateFlow.value = NetworkState.Failure(errorBody!!)
                 }
-
-            }
-        }}
+            }}}
 
 
     fun addToFavorites(favorite: Favorite){
