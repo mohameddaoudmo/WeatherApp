@@ -145,7 +145,6 @@ class HomeFragment : Fragment() {
         connectivityObserver = ConnectivtyManger(requireContext())
         lifecycleScope.launch {
             connectivityObserver.observe().collect { status ->
-                // update the text view with the new status
                 println( "Connectivity status: $status")
                 if(status== ConnectivityObserver.Status.Available){
                     isconnected=true
@@ -178,12 +177,12 @@ class HomeFragment : Fragment() {
 
 
                 }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
-
                     Snackbar.make(view, "This is a custom snack bar", Snackbar.LENGTH_LONG)
                         .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.maincolor))
                         .show()
                 }else {
                     isconnected = false
+
                 }
             }
         }

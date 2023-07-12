@@ -42,5 +42,6 @@
     <string name="fav">Favourite</string>
     <string name="home">Home</string>
     <string name="selectlocation">SelectLocation</string>
+    <string name="connectionmessage">There is no connection can\'t last Forcast</string>
 
 </resources>
