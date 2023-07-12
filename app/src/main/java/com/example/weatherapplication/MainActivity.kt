@@ -31,16 +31,7 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connectivityObserver = ConnectivtyManger(this)
-        lifecycleScope.launch {
-            connectivityObserver.observe().collect { status ->
-                println( "Connectivity status: $status")
-                if(status== ConnectivityObserver.Status.Available){
-                    isconnected=true
-                    println("is connected")
-                }else{isconnected=false}
-            }
-        }
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot())
         window.setFlags(

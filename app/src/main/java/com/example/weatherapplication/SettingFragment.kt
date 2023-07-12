@@ -64,9 +64,10 @@ class SettingFragment : Fragment() {
 
         binding.mapRadioButton
             .setOnClickListener{
-            val intent = Intent(requireContext(), MapssActivity::class.java)
-            startActivityForResult(intent, 1)
                 viewModel.satusoflocation.value="map"
+
+                val intent = Intent(requireContext(), MapssActivity::class.java)
+            startActivityForResult(intent, 1)
 
         }
         binding.celsuis.setOnClickListener { viewModel.unitfortemp.value ="metric" }
@@ -85,6 +86,7 @@ class SettingFragment : Fragment() {
                 editor.apply()
                 viewModel.language.value ="en"}
         binding.gpsRadioButton.setOnClickListener {viewModel.satusoflocation.value="gps" }
+
 
     }
 

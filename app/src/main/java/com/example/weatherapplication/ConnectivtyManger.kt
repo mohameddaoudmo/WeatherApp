@@ -21,6 +21,11 @@ class ConnectivtyManger (   private val context: Context
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkRequest = NetworkRequest.Builder()
+        .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+        .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+        .build()
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun observe(): Flow<ConnectivityObserver.Status> {
@@ -46,7 +51,7 @@ class ConnectivtyManger (   private val context: Context
                     launch { send(ConnectivityObserver.Status.Unavailable) }
                 }
             }
-
+//connectivityManager.requestNetwork(networkRequest,callback)
             connectivityManager.registerDefaultNetworkCallback(callback)
             awaitClose {
                 connectivityManager.unregisterNetworkCallback(callback)

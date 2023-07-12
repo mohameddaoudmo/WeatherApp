@@ -51,25 +51,7 @@ class dialog : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        connectivityObserver = ConnectivtyManger(this)
-        lifecycleScope.launch {
-            connectivityObserver.observe().collect { status ->
-                // update the text view with the new status
-                println( "Connectivity status: $status")
-                if(status== ConnectivityObserver.Status.Available){
-                    isconnected=true
-                    println("is connected")
-                }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
 
-                    Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
-                        .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.maincolor))
-                        .show()
-                }
-                else{ Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
-                    .setBackgroundTint(ContextCompat.getColor(applicationContext, R.color.maincolor))
-                    .show()}
-            }
-        }
         binding = ActivityDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.setFlags(

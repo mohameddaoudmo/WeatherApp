@@ -122,8 +122,10 @@ dialog.show()
                 id: Long
             ) {
                 val selectedItem = parent?.getItemAtPosition(position).toString()
-                if (selectedItem == "Alarm sound") {
+                if (selectedItem == "Alarm sound" || selectedItem=="تبيه") {
                     alarm = true
+                    println("aaaaaaaaaaaaalaer")
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(
                             requireContext()
                         )
@@ -136,6 +138,7 @@ dialog.show()
                         requireContext().startActivity(intent)
                     }
                     statusOfSound = "Alarm sound"
+                    println("aaaaaaaaaaaaalaer")
                 } else {
                     alarm = false
                 }

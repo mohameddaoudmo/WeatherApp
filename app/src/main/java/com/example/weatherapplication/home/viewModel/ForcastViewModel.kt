@@ -20,7 +20,6 @@ import kotlinx.coroutines.launch
 
 class ForcastViewModel(private val repoInterface: RepositioryInterface) : ViewModel() {
 
-var flagconnect:Boolean=true
     private val _productsMutableStateFlow: MutableStateFlow<NetworkState> =
         MutableStateFlow(NetworkState.Loading)
     val productsStateFlow: StateFlow<NetworkState>
@@ -104,10 +103,4 @@ fun addToAlert(alert:  Alert){
 
 
 }
-    fun isNetworkConnected(context: Context): Boolean {
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val networkInfo = connectivityManager.activeNetworkInfo
-        return networkInfo != null && networkInfo.isConnected
-    }
 }

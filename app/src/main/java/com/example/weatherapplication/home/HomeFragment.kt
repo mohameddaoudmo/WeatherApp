@@ -203,7 +203,6 @@ class HomeFragment : Fragment() {
                             println("ssssssaaaaaaaaaaaaaaaaaaaaaaaaa")
                             val arabicFormat = NumberFormat.getInstance(Locale("ar"))
 //                            binding.timetv.text = arabicFormat.format(timeZoneTime)
-                            binding.place.text = ""
                             binding.tvWindSpeedUnit.text =
                                 englishNumberToArabicNumber(result.myResponse.current.wind_speed.toInt())
                             binding.temparaturetxtview.text =
@@ -214,7 +213,6 @@ class HomeFragment : Fragment() {
                                 arabicFormat.format(result.myResponse.current.pressure)
                             binding.tvHumidityTemp.text =
                                 arabicFormat.format(result.myResponse.current.humidity)
-                            binding.place.text =""
 
 
                         } else {
@@ -272,9 +270,10 @@ class HomeFragment : Fragment() {
         }
         viewModel.language.observe(viewLifecycleOwner) {
             language = it
-            forcastViewModel.getWeather(latitude, longitude, language, unit)
 
-        }
+            forcastViewModel.getWeather(latitude, longitude, language, unit)}
+
+
         viewModel.unitfortemp.observe(viewLifecycleOwner) {
             unit = it
         }
@@ -285,8 +284,10 @@ class HomeFragment : Fragment() {
         viewModel.satusoflocation.observe(viewLifecycleOwner) {
             println(it)
             if (it == "gps") {
+                println("gps")
                 gps = true
             } else {
+                println("map")
                 gps = false
             }
 
@@ -327,6 +328,7 @@ class HomeFragment : Fragment() {
 
 
             if (gps) {
+                println("gpppppppppps")
                 longitude = lastLocation?.longitude ?: 0.0
                 latitude = lastLocation?.latitude ?: 0.0
 
