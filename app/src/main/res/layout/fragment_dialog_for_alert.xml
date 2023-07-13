@@ -90,15 +90,15 @@
 
             <TextView
                 android:id="@+id/textView7"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
+                android:layout_width="289dp"
+                android:layout_height="match_parent"
                 android:text="@string/selectlocation"
                 android:textColor="#0B0B0B"
                 android:textSize="20sp" />
 
             <ImageView
                 android:id="@+id/locationwaydefine"
-                android:layout_width="50dp"
+                android:layout_width="103dp"
                 android:layout_height="41dp"
                 android:layout_gravity="right"
                 android:layout_weight="1"

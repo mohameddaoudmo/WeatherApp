@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.animation.ObjectAnimator;
+import android.content.Context
 import android.location.Geocoder
 import android.util.Log
 import android.view.View
@@ -34,11 +35,14 @@ class MapssActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapCl
 lateinit var binding : ActivityMapssBinding
 lateinit var autocomplete :AutocompleteSupportFragment
     lateinit var geocoder: Geocoder
+    var language:String?=""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mapss)
+        val sharedPref = this.getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
+         language =sharedPref?.getString("language", "")
         geocoder = Geocoder(this)
 
         Places.initialize(applicationContext,"AIzaSyB2ABcZ9Yg_54ZEJgy0ZxcOTRgPbPSpu4M")
@@ -92,12 +96,12 @@ println(p0.statusMessage)
             returnIntent.putExtra("land", contry)
 
             println(x.size)
-        }        // Show a dialog box asking the user to confirm the selected location
+        }
+        if (language=="en"){
         AlertDialog.Builder(this)
             .setTitle("Confirm selection")
             .setMessage("Do you want to choose this $contry?")
             .setPositiveButton("Yes") { dialog, which ->
-                // Save the latitude and longitude to a variable or send it to the server
                 val selectedLocation = LatLng(lat, lng)
                 Log.d("MapsActivity", "Selected location: $selectedLocation")
                 setResult(Activity.RESULT_OK, returnIntent)
@@ -107,7 +111,23 @@ println(p0.statusMessage)
                 // Remove the marker from the map
                 marker?.remove()
             }
-            .show()
+            .show()}
+        else{
+            AlertDialog.Builder(this)
+                .setTitle("اكد اختيارك")
+                .setMessage("هل تريد اختيار هذه الدوله $contry؟")
+                .setPositiveButton("نعم") { dialog, which ->
+                    val selectedLocation = LatLng(lat, lng)
+                    Log.d("MapsActivity", "Selected location: $selectedLocation")
+                    setResult(Activity.RESULT_OK, returnIntent)
+                    finish()
+                }
+                .setNegativeButton("لا") { dialog, which ->
+                    // Remove the marker from the map
+                    marker?.remove()
+                }
+                .show()
+        }
 
 
     }

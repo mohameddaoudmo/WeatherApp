@@ -17,6 +17,7 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/bottombar"
         android:fontFamily="@font/bevan"
+        android:gravity="center"
         android:padding="16dp"
         android:text="@string/lanugaue"
         android:textColor="#F5F9FB"

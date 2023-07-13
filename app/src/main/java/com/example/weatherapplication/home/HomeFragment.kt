@@ -99,7 +99,7 @@ class HomeFragment : Fragment() {
                 } else if (status == ConnectivityObserver.Status.Lost) {
                     isconnected = false
 
-                    Snackbar.make(binding.root, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.root, "there is no connection", Snackbar.LENGTH_LONG)
                         .setBackgroundTint(
                             ContextCompat.getColor(
                                 requireContext(),
@@ -177,7 +177,7 @@ class HomeFragment : Fragment() {
 
 
                 }else if(status==ConnectivityObserver.Status.Lost){isconnected=false
-                    Snackbar.make(view, "This is a custom snack bar", Snackbar.LENGTH_LONG)
+                    Snackbar.make(view, "there is no connection", Snackbar.LENGTH_LONG)
                         .setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.maincolor))
                         .show()
                 }else {
