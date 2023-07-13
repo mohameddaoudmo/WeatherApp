@@ -86,6 +86,9 @@ class HomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onResume() {
         super.onResume()
+        if (!gps) {
+            fusedClient.removeLocationUpdates(locationCallBack)
+        }
         if (gps) {
             getLastLocation()
 
@@ -114,7 +117,10 @@ class HomeFragment : Fragment() {
         }
 
     }
-
+    override fun onPause() {
+        super.onPause()
+        fusedClient.removeLocationUpdates(locationCallBack)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -379,7 +385,7 @@ println(result.myResponse.current.weather[0].icon)
 
 
             if (gps) {
-                println("gpppppppppps")
+//                println("gpppppppppps")
                 longitude = lastLocation?.longitude ?: 0.0
                 latitude = lastLocation?.latitude ?: 0.0
 
@@ -418,9 +424,11 @@ println(result.myResponse.current.weather[0].icon)
 
     private fun getLastLocation() {
         if (checkPermission()) {
-            if (isLocationIsEnabled()) {
+            if (isLocationIsEnabled()&&gps) {
                 requestNewLocationData()
             } else {
+                fusedClient.removeLocationUpdates(locationCallBack)
+
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 startActivity(intent)
             }
@@ -469,7 +477,8 @@ println(result.myResponse.current.weather[0].icon)
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationRequest.interval = 0
-        fusedClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper())
+        if(gps){
+        fusedClient.requestLocationUpdates(locationRequest, locationCallBack, Looper.myLooper())}
     }
 
 
